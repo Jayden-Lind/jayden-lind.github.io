@@ -298,7 +298,7 @@ u2TPqjGvyVZDj3OLRMmNTR/OUmzQjpNIGyrIjDdvm1/Hkky/CfyXUucFnshJr/BL
 
 <p>Now let's sign in to the host with this new private key. We now have user access, and can get the user flag.</p>
 
-## User OWNED
+## User owned!
 
 ``` sh
 ┌─[jayden@JD-Desktop]─[~/ctf/openssource]
@@ -357,5 +357,5 @@ dev01@opensource:/tmp$ cat /tmp/tmp.txt
 dev01@opensource:/tmp$ 
 ```
 
-## root OWNED
+## Root owned!
 
