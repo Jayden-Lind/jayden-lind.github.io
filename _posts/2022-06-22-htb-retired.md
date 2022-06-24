@@ -39,7 +39,7 @@ Service detection performed. Please report any incorrect results at https://nmap
 Nmap done: 1 IP address (1 host up) scanned in 18.65 seconds
 ```
 
-Let's checkout the webpage, which redirects' us to `http://10.10.11.154/index.php?page=default.html`.
+Let's checkout the webpage, which redirects us to `http://10.10.11.154/index.php?page=default.html`.
 
 This looks like a LFI (Local File Inclusion) straight away. Let's FUZZ this and find some pages.
 
@@ -95,7 +95,7 @@ if(isset($_FILES['licensefile'])) {
 php-fpm: pool www
 ```
 
-We have LFI, and can now look for other running processes on this box through a quick python script, that I wrote [PID Scanner](https://github.com/Jayden-Lind/HTB-Retired/blob/master/pid_scanner.py)
+We have LFI, and can now look for other running processes on this box through a quick python script, that I wrote [PID Scanner](https://github.com/Jayden-Lind/HTB-Retired/blob/master/pid_scanner.py).
 
 ```sh
 ┌─[jayden@JD-Desktop]─[~/ctf/retired]
@@ -112,7 +112,7 @@ php-fpm: pool www
 php-fpm: pool www
 ```
 
-The interesting process is this PID of 401 with the cmdline of /usr/bin/activate_license 1337. Let's pull this binary down, try to play around with it, and the open it up through Ghidra to try and understand it.
+The interesting process is this PID of 401 with the cmdline of /usr/bin/activate_license 1337. Let's pull this binary down, try to play around with it, and then open it up through Ghidra to try and understand it.
 
 ```sh
 ┌─[jayden@JD-Desktop]─[~/ctf/retired]
@@ -129,7 +129,7 @@ Error: specify port to bind to
 [+] listening …
 ```
 
-Using [pwntools](https://docs.pwntools.com/en/stable/) we can check if there's any quick and easy avenues on this particular binary. Which there is none, as seen below.
+Using [pwntools](https://docs.pwntools.com/en/stable/) we can check if there's any quick and easy avenues on this particular binary. Which based on the output below, shows no easy wins.
 
 ```sh
 ┌─[✗]─[jayden@JD-Desktop]─[~/ctf/retired]
@@ -162,7 +162,7 @@ Later down on line 22 it then reads the second message from this socket, and rea
 sVar2 = read(sockfd,buffer,(ulong)msglen);
 ```
 
-What we can do is look at using this overflow to then bypass the NX (No eXecute) on the stack by calling mprotect() on the stack space, making the stack executable. An okay example to follow is [Bypass NX with mprotect](https://syrion.me/blog/elfx64-bypass-nx-with-mprotect/). The instructions skip over some steps, but using this blog post, John Hammonds [Video](https://www.youtube.com/watch?v=i5-cWI_HV8o&t=896s) (shoutout John Hammond!) and the [jmp rsp](https://ir0nstone.gitbook.io/notes/types/stack/reliable-shellcode/using-rsp) to execute the stack we should have code execution.
+What we can do is look at using this overflow to then bypass the NX (No eXecute) on the stack by calling mprotect() on the stack space, making the stack executable. An okay example to follow is [Bypass NX with mprotect](https://syrion.me/blog/elfx64-bypass-nx-with-mprotect/). The instructions skip over some steps, but using this blog post, John Hammonds [Video](https://www.youtube.com/watch?v=i5-cWI_HV8o&t=896s) (shoutout John Hammond!) and the [jmp rsp](https://ir0nstone.gitbook.io/notes/types/stack/reliable-shellcode/using-rsp) to execute what we put on the stack.
 
 High Level Overview:
 
