@@ -18,58 +18,32 @@ There is a number of changes here, upgraded server, Dell R710 -> Dell T630, a ne
 
 Changelog:
 
- &#43; LINDS-OPNSense-01 (OPNSense 22.1)
-
- &#43; HPE OfficeConnect 1920s
-
- &#43; LINDS-ESXi-02 (Dell T630)
-
- &#43; JD-ESXi-01 (HPE DL360 G9)
-
- &#43; &#43; JD-DC-01 (Windows Server 2019)
-
- &#43; &#43; JD-Dev-01 (CentOS 9 Stream)
-
- &#43; &#43; JD-Zabbix-01 (CentOS 8 Stream)
-
- &#43; &#43; JD-Plex-01 (CentOS 9 Stream)
-
- &#43; &#43; JD-Docker-01 (CentOS 9 Stream)
-
- &#43; &#43; JD-Torrent-01 (CentOS 8 Stream)
-
- &#43; &#43; JD-VSCA-01 (vSphere Photon OS)
-
- &#43; &#43; JD-Docker-01 (CentOS 9 Stream)
-
- &#43; &#43; JD-OPNSense-01 (OPNSense 22.1)
-
- &#43; &#43; JD-GitLab-01 (CentOS 8 Stream)
-
- &#43; &#43; JD-GitLab-R01 (CentOS 8 Stream)
-
- &#43; &#43; KUBE-ADM (CentOS 8 Stream)
-
- &#43; &#43; KUBE-01 (CentOS 8 Stream)
-
- &#43; &#43; KUBE-02 (CentOS 8 Stream)
-
- &#45; LINDS-PiHole
-
- &#45; LINDS-ERx (UBIQUITI EDGEROUTER X)
-
- &#45; LINDS-Plex (Windows Server 2019)
-
- &#45; LINDS-Veeam (Windows Server 2019)
-
- &#45; LINDS-Web (Windows Server 2019)
-
- &#45; LINDS-MineOS (Turnkey MineOS)
-
- &#45; Dell PowerConnect 6248
-
- &#45; LINDS-VSCA (vSphere Photon OS)
-
+ &#43; LINDS-OPNSense-01 (OPNSense 22.1)<br>
+ &#43; HPE OfficeConnect 1920s<br>
+ &#43; LINDS-ESXi-02 (Dell T630)<br>
+ &#43; JD-ESXi-01 (HPE DL360 G9)<br>
+ &#43; &#43; JD-DC-01 (Windows Server 2019)<br>
+ &#43; &#43; JD-Dev-01 (CentOS 9 Stream)<br>
+ &#43; &#43; JD-Zabbix-01 (CentOS 8 Stream)<br>
+ &#43; &#43; JD-Plex-01 (CentOS 9 Stream)<br>
+ &#43; &#43; JD-Docker-01 (CentOS 9 Stream)<br>
+ &#43; &#43; JD-Torrent-01 (CentOS 8 Stream)<br>
+ &#43; &#43; JD-VSCA-01 (vSphere Photon OS)<br>
+ &#43; &#43; JD-Docker-01 (CentOS 9 Stream)<br>
+ &#43; &#43; JD-OPNSense-01 (OPNSense 22.1)<br>
+ &#43; &#43; JD-GitLab-01 (CentOS 8 Stream)<br>
+ &#43; &#43; JD-GitLab-R01 (CentOS 8 Stream)<br>
+ &#43; &#43; KUBE-ADM (CentOS 8 Stream)<br>
+ &#43; &#43; KUBE-01 (CentOS 8 Stream)<br>
+ &#43; &#43; KUBE-02 (CentOS 8 Stream)<br>
+ &#45; LINDS-PiHole<br>
+ &#45; LINDS-ERx (UBIQUITI EDGEROUTER X)<br>
+ &#45; LINDS-Plex (Windows Server 2019)<br>
+ &#45; LINDS-Veeam (Windows Server 2019)<br>
+ &#45; LINDS-Web (Windows Server 2019)<br>
+ &#45; LINDS-MineOS (Turnkey MineOS)<br>
+ &#45; Dell PowerConnect 6248<br>
+ &#45; LINDS-VSCA (vSphere Photon OS)<br>
 
 
 # 2020 Update:
