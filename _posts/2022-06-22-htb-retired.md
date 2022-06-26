@@ -95,7 +95,7 @@ if(isset($_FILES['licensefile'])) {
 php-fpm: pool www
 ```
 
-We have LFI, and can now look for other running processes on this box through a quick python script, that I wrote [PID Scanner](https://github.com/Jayden-Lind/HTB-Retired/blob/master/pid_scanner.py).
+We have LFI, and can now look for other running processes by enumerating through /proc/PID/cmdline, and we can automate this through a quick python script that I wrote [PID Scanner](https://github.com/Jayden-Lind/HTB-Retired/blob/master/pid_scanner.py).
 
 ```sh
 ┌─[jayden@JD-Desktop]─[~/ctf/retired]
@@ -112,7 +112,7 @@ php-fpm: pool www
 php-fpm: pool www
 ```
 
-The interesting process is this PID of 401 with the cmdline of /usr/bin/activate_license 1337. Let's pull this binary down, try to play around with it, and then open it up through Ghidra to try and understand it.
+The interesting process from this output, is this PID of 401 with the cmdline of /usr/bin/activate_license 1337. Let's pull this binary down through the LFI, try to play around with it, and then open it up through Ghidra to try and understand it.
 
 ```sh
 ┌─[jayden@JD-Desktop]─[~/ctf/retired]
@@ -162,9 +162,13 @@ Later down on line 22 it then reads the second message from this socket, and rea
 sVar2 = read(sockfd,buffer,(ulong)msglen);
 ```
 
-What we can do is look at using this overflow to then bypass the NX (No eXecute) on the stack by calling mprotect() on the stack space, making the stack executable. An okay example to follow is [Bypass NX with mprotect](https://syrion.me/blog/elfx64-bypass-nx-with-mprotect/). The instructions skip over some steps, but using this blog post, John Hammonds [Video](https://www.youtube.com/watch?v=i5-cWI_HV8o&t=896s) (shoutout John Hammond!) and the [jmp rsp](https://ir0nstone.gitbook.io/notes/types/stack/reliable-shellcode/using-rsp) to execute what we put on the stack.
+By researching up on binary exploitation, John Hammonds [Video](https://www.youtube.com/watch?v=i5-cWI_HV8o&t=896s) (shoutout John Hammond!) explains the idea of ROP (Return Oriented Programming) really well. Our binary is different from this example, but we can use this as a basis point.
 
-High Level Overview:
+What we can do is look at using this overflow to then bypass the NX (No eXecute) on the stack by calling mprotect() on the stack address space, making the stack executable. An okay example of this is [Bypass NX with mprotect](https://syrion.me/blog/elfx64-bypass-nx-with-mprotect/), but the instructions skip over some steps, and dont explain enough of the steps.
+
+But this is not enough, as we need a way to execute the stack, and that can be done with a "jmp rsp" (jump to stack pointer) and we can use the [jmp rsp](https://ir0nstone.gitbook.io/notes/types/stack/reliable-shellcode/using-rsp) instructionsto execute what we put on the stack.
+
+### High Level Overview:
 
 We need to get the address of mprotect on the stack, the return addresses to pop the parameters we want to use in mprotect() in the stack, so that mprotect() can then be executed to make the stack executable and then execute our code through a jmp rsp instruction.
 
