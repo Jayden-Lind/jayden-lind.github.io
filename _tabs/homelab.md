@@ -18,7 +18,7 @@ There is a number of changes here, upgraded server, Dell R710 -> Dell T630, a ne
 
 Changelog:
 
-<p>
+<li>
 
 &#43; LINDS-OPNSense-01 (OPNSense 22.1)
 
@@ -72,7 +72,7 @@ Changelog:
 
 &#45; LINDS-VSCA (vSphere Photon OS)
 
-</p>
+</li>
 
 
 # 2020 Update:
