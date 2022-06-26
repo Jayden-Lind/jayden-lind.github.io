@@ -18,8 +18,6 @@ There is a number of changes here, upgraded server, Dell R710 -> Dell T630, a ne
 
 Changelog:
 
-<li>
-
 &#43; LINDS-OPNSense-01 (OPNSense 22.1)
 
 &#43; HPE OfficeConnect 1920s
@@ -71,8 +69,6 @@ Changelog:
 &#45; Dell PowerConnect 6248
 
 &#45; LINDS-VSCA (vSphere Photon OS)
-
-</li>
 
 
 # 2020 Update:
