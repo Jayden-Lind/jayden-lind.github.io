@@ -8,6 +8,8 @@ tags: [security, hackthebox, ctf]
 gh-repo: Jayden-Lind/HTB-Retired
 ---
 
+# HTB - Retired walkthrough
+
 ![image](/img/2022/06/Retired.png)
 
 Retired box is a medium rated difficulty box, but for me personally it was a hard box. I've never done any sort of binary exploitation before and because of that, this box took me a good 30+ hours to solve.
