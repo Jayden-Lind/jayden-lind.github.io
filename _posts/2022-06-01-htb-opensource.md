@@ -1,9 +1,6 @@
 ---
 layout: post
 title: HackTheBox - OpenSource
-#subtitle: Excerpt from Soulshaping by Jeff Brown
-#cover-img: /assets/img/path.jpg
-#thumbnail-img: /assets/img/thumb.png
 tags: [security, hackthebox, ctf]
 gh-repo: Jayden-Lind/HTB-Opensource
 ---
