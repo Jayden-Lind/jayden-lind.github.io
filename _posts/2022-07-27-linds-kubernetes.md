@@ -26,4 +26,4 @@ My current deployment consists of:
 5. 2 x [TrueNAS](https://www.truenas.com/) hosts with 100GB storage with NFS being shared out to Kubernetes Pods.
 
 
-![image](../img/2022/07/LINDS-Kubernetes.png)
+![image](/img/2022/07/LINDS-Kubernetes.png)
