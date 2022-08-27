@@ -24,6 +24,7 @@ My current deployment consists of:
 3. [CSI-SMB Driver](https://github.com/kubernetes-csi/csi-driver-smb)
 4. [My Kubernetes manifests](https://github.com/Jayden-Lind/LINDS-Kubernetes)
 5. 2 x [TrueNAS](https://www.truenas.com/) hosts with 100GB storage with NFS being shared out to Kubernetes Pods.
+6. [MetalLB](https://metallb.universe.tf/) to share other services using BGP and L2 advertisements.
 
 
 ![image](/img/2022/07/LINDS-Kubernetes.png)
