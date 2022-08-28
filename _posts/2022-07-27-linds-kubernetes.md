@@ -13,18 +13,18 @@ I have been running multiple Docker hosts with an assortment of containers that 
 
 ### Puppet Automation
 
-To automate setting up of VM's, I implemented it through [Puppet](https://puppet.com/docs/puppet/7/install_puppet.html) and my manifests can be seen in [kubernetes.pp](https://github.com/Jayden-Lind/LINDS-Puppet/blob/master/manifests/kubernetes.pp), which uses [flannel](https://github.com/flannel-io/flannel) as the network fabric.
+To automate onboarding of a VM to the kubernetes cluster, I implemented it through [Puppet](https://puppet.com/docs/puppet/7/install_puppet.html) and my manifests can be seen in [kubernetes.pp](https://github.com/Jayden-Lind/LINDS-Puppet/blob/master/manifests/kubernetes.pp), which uses [flannel](https://github.com/flannel-io/flannel) as the network fabric.
 
 ## Current deployment
 
 My current deployment consists of:
 
 1. [flannel](https://github.com/flannel-io/flannel) for the networking fabric.
-2. [Ingress-NGINX](https://github.com/kubernetes/ingress-nginx) for setting up an ingress controller with nginx virtualhosts to host multiple services on a single host.
+2. [Ingress-NGINX](https://github.com/kubernetes/ingress-nginx) for setting up an ingress controller, using NGINX virtualhosts to host multiple services on a single host.
 3. [CSI-SMB Driver](https://github.com/kubernetes-csi/csi-driver-smb) for mounting SMB shares.
 4. [My Kubernetes manifests](https://github.com/Jayden-Lind/LINDS-Kubernetes)
-5. 2 x [TrueNAS](https://www.truenas.com/) hosts with 100GB storage with NFS being shared out to Kubernetes Pods.
-6. [MetalLB](https://metallb.universe.tf/) to share other services using BGP and L2 advertisements.
+5. 2 x [TrueNAS](https://www.truenas.com/) hosts with 100GB storage, shared out through NFS for Physical Volumes to be created in K8s.
+6. [MetalLB](https://metallb.universe.tf/) to share load balancing services using BGP and L2 advertisements.
 
 
 ### MetalLB
@@ -33,7 +33,7 @@ My current deployment consists of:
 
 I have this running in L2 (Layer 2) and BGP (Border Gateway Protocol) to learn and expirement with BGP.
 
-From [metallb.yml], I have set up the below.
+From [metallb.yml](https://github.com/Jayden-Lind/LINDS-Kubernetes/blob/master/metallb.yml), I have set up the below.
 
 ```
 apiVersion: metallb.io/v1beta1
@@ -70,7 +70,7 @@ IP pool to be advertised through BGP, and the BGP peer, which is my OPNSense box
 
 To confirm that a service is being advertised, I moved my Factorio server to use the BGP IP pool.
 
-```
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -89,7 +89,7 @@ spec:
 
 Can confirm that the Factorio service is being advertised through kubectl
 
-```
+```shell
 [root@jd-kube-01 LINDS-Kube]# kubectl get service factorio --namespace default 
 NAME       TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)                           AGE
 factorio   LoadBalancer   10.107.11.59   172.16.10.1   34197:31812/UDP,27015:31516/TCP   10d
@@ -98,7 +98,7 @@ factorio   LoadBalancer   10.107.11.59   172.16.10.1   34197:31812/UDP,27015:315
 
 Now to confirm that from OPNsense we can see this 172.16.10.1 being advertised over BGP.
 
-```
+```shell
 root@JD-OPNsense-01:~ # netstat -rn
 Routing tables
 
