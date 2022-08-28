@@ -87,7 +87,7 @@ spec:
 ...
 ```
 
-Can confirm that the Factorio service is being advertised through kubectl
+Can confirm that the `factorio` service is being advertised through kubectl
 
 ```shell
 [root@jd-kube-01 LINDS-Kube]# kubectl get service factorio --namespace default 
@@ -96,7 +96,7 @@ factorio   LoadBalancer   10.107.11.59   172.16.10.1   34197:31812/UDP,27015:315
 [root@jd-kube-01 LINDS-Kube]# 
 ```
 
-Now to confirm that from OPNsense we can see this 172.16.10.1 being advertised over BGP.
+Now to confirm that from OPNsense we can see this external service IP 172.16.10.1 being advertised over BGP.
 
 ```shell
 root@JD-OPNsense-01:~ # netstat -rn
