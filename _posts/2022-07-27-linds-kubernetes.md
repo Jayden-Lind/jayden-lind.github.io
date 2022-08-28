@@ -19,9 +19,9 @@ To automate setting up of VM's, I implemented it through [Puppet](https://puppet
 
 My current deployment consists of:
 
-1. [flannel](https://github.com/flannel-io/flannel)
-2. [Ingress-NGINX](https://github.com/kubernetes/ingress-nginx)
-3. [CSI-SMB Driver](https://github.com/kubernetes-csi/csi-driver-smb)
+1. [flannel](https://github.com/flannel-io/flannel) for the networking fabric.
+2. [Ingress-NGINX](https://github.com/kubernetes/ingress-nginx) for setting up an ingress controller with nginx virtualhosts to host multiple services on a single host.
+3. [CSI-SMB Driver](https://github.com/kubernetes-csi/csi-driver-smb) for mounting SMB shares.
 4. [My Kubernetes manifests](https://github.com/Jayden-Lind/LINDS-Kubernetes)
 5. 2 x [TrueNAS](https://www.truenas.com/) hosts with 100GB storage with NFS being shared out to Kubernetes Pods.
 6. [MetalLB](https://metallb.universe.tf/) to share other services using BGP and L2 advertisements.
