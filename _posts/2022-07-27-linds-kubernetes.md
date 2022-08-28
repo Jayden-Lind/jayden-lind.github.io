@@ -35,7 +35,7 @@ I have this running in L2 (Layer 2) and BGP (Border Gateway Protocol) to learn a
 
 From [metallb.yml](https://github.com/Jayden-Lind/LINDS-Kubernetes/blob/master/metallb.yml), I have set up the below.
 
-```
+```yaml
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
