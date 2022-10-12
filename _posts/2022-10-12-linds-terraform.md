@@ -1,9 +1,11 @@
 ---
 layout: post
-title: Implementing IaaC (Terraform)
+title: Implementing Terraform with vSphere
 tags: [terraform, homelab]
 gh-repo: Jayden-Lind/LINDS-Terraform
 ---
+
+![image](/img/2022/10/terraform.png)
 
 # Introduction
 
