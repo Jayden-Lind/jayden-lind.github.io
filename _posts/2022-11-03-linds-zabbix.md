@@ -5,7 +5,7 @@ tags: [zabbix, homelab]
 gh-repo: Jayden-Lind/LINDS-Kubernetes
 ---
 
-![image](../img/2022/11/zabbix.png)
+![image](/img/2022/11/zabbix.png)
 
 # Introduction
 
@@ -21,4 +21,4 @@ To move this to Kubernetes, ideally we would want a PostgreSQL cluster to store 
 
 ### Screenshot
 
-![image](../img/2022/11/zabbix-1.png)
+![image](/img/2022/11/zabbix-1.png)
