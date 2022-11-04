@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Monitoring the homelab with Zabbix
+title: Monitoring homelab with Zabbix
 tags: [zabbix, homelab]
 gh-repo: Jayden-Lind/LINDS-Kubernetes
 ---
