@@ -11,6 +11,8 @@ gh-repo: Jayden-Lind/LINDS-Kubernetes
 
 The best way to have visbility on what is going on in your homelab is to have monitoring over everything from Networking, Storage, and Compute hosts. To do this, I have decided to use Zabbix in HA on my Kubernetes cluster, while integrating it with my PostgreSQL HA cluster to ensure ultimate uptime of my monitoring solution.
 
+## Architecture
+
 ![image](/img/2022/11/kube-zabbix.png)
 
 ## Kubernetes
