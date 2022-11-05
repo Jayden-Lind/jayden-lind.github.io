@@ -13,6 +13,8 @@ The best way to have visbility on what is going on in your homelab is to have mo
 
 ## Architecture
 
+Below is a simple diagram showing the physical infrastructure backing this Zabbix deployment.
+
 ![image](/img/2022/11/kube-zabbix.png)
 
 ## Kubernetes
