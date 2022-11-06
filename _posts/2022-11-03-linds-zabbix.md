@@ -46,4 +46,4 @@ To receive alerting, I've set up Discord webhooks as well as [ZBX Viewer](https:
 
 #### Hosts
 
-![image](/img/2022/11/zabbix-1.png)
+![image](/img/2022/11/zabbix-2.png)
