@@ -161,7 +161,7 @@ Later down on line 22 it then reads the second message from this socket, and rea
 sVar2 = read(sockfd,buffer,(ulong)msglen);
 ```
 
-By researching up on binary exploitation, John Hammonds [Video](https://www.youtube.com/watch?v=i5-cWI_HV8o&t=896s) (shoutout John Hammond!) explains the idea of ROP (Return Oriented Programming) really well. Our binary is different from this example, but we can use this as a basis point.
+By researching up on binary exploitation, John Hammonds [Video](https://www.youtube.com/watch?v=i5-cWI_HV8o&t=896s) explains the idea of ROP (Return Oriented Programming) really well. Our binary is different from this example, but we can use this as a basis point.
 
 What we can do is look at using this overflow to then bypass the NX (No eXecute) on the stack by calling mprotect() on the stack address space, making the stack executable. An okay example of this is [Bypass NX with mprotect](https://syrion.me/blog/elfx64-bypass-nx-with-mprotect/), but the instructions skip over some steps, and dont explain enough of the steps.
 
