@@ -4,7 +4,7 @@ title: Creating Certificate for EdgeMAX device
 #subtitle: Excerpt from Soulshaping by Jeff Brown
 #cover-img: /assets/img/path.jpg
 #thumbnail-img: /assets/img/thumb.png
-tags: [homelab]
+tags: [Homelab]
 ---
 <p>Creating an internal CA (certificate authority), has saved the annoyance of having to click "Proceed Anyway" through Chrome or Internet Explorer every time I open up a HTTPS enabled web interface for one of my devices. It also has enabled me to learn more about certificate process.</p>
 

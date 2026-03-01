@@ -1,10 +1,10 @@
 ---
 layout: post
-title: Changing Domain Name
+title: Changing Windows Forest Domain Name
 #subtitle: Excerpt from Soulshaping by Jeff Brown
 #cover-img: /assets/img/path.jpg
 #thumbnail-img: /assets/img/thumb.png
-tags: [homelab]
+tags: [Homelab]
 ---
 
 <p>When I first created my homelab ennvironment, I didn't fully know what I was doing. But that's the reason for a homelab right?<br>One of the first things I got wrong when building a domain was the actual forest name being wrong. The domain UPN suffix is linds.local and the domain is LINDS-SERVER, and I wish to change it to linds.com.au and LINDS.</p>

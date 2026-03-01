@@ -4,7 +4,7 @@ title: Homelab Update 15/04/2020
 #subtitle: Excerpt from Soulshaping by Jeff Brown
 #cover-img: /assets/img/path.jpg
 #thumbnail-img: /assets/img/thumb.png
-tags: [homelab]
+tags: [Homelab]
 ---
 
 <p>It has been a while since my last post. I have completed some updates over the past few months to my Homelab. The biggest addition is using Docker, which was a challenging but rewarding experience. I also changed from Hyper-V back to ESXi, while also running vCenter Server, upgraded the RAM from 48GB to 64GB, which allowed me to have more VM’s running. Docker My Docker instance is running on a Red Hat Enterprise Linux VM, which gave me a chance to learn more about Linux.</p>

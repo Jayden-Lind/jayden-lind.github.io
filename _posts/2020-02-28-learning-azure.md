@@ -2,7 +2,7 @@
 layout: post
 title: Learning Azure
 #subtitle: Each post also has a subtitle
-tags: [homelab]
+tags: [Homelab]
 #comments: true
 ---
 

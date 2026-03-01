@@ -1,7 +1,7 @@
 ---
 layout: post
 title: HackTheBox - Retired
-tags: [security, hackthebox, ctf]
+tags: [Security, HackTheBox, CTF]
 gh-repo: Jayden-Lind/HTB-Retired
 ---
 

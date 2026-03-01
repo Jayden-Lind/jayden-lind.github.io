@@ -2,8 +2,6 @@
 layout: page
 title: Homelab
 subtitle: Updates and diagrams of my homelab setup
-#cover-img: /assets/img/path.jpg
-#thumbnail-img: /assets/img/thumb.png
 icon: fas fa-info-circle
 tags: [homelab]
 order: 1
@@ -15,13 +13,13 @@ order: 1
 A lot has changed. New Server hardware, new virtualization platform, hardcore into Kubernetes, and a lot of automation.
 
 ### Infrastructure Updates
-- **Hardware Upgrade**: Swapped the HPE DL360 G9 for a Lenovo SR655 (EPYC 64-core CPU, 256GB RAM).
+- **Hardware Upgrade**: Swapped the HPE DL360 G9 for a Lenovo SR655 (EPYC 3rd gen 64-core CPU, 256GB RAM).
 - **Virtualization**: Migrated both server nodes to Proxmox and using ZFS.
+- **IaC**: Upgraded from Puppet to Ansible, Terraform, and Packer for automated VM provisioning.
 - **Routing**: Upgraded routing to VyOS (replacing OPNSense).
 
 ### Kubernetes & Automation
-- **Advanced Networking**: Extended Kubernetes cluster to use eBPF and established direct BGP peering with routers.
-- **IaC Adoption**: Implemented Ansible, Terraform, and Packer for automated VM provisioning.
+- **Advanced Networking**: Extended Kubernetes cluster to use eBPF and established direct BGP peering with VyOS routers.
 - **Consolidation**: The Majority of services have been consolidated onto the Kubernetes cluster, reducing number of VM's and improving manageability.
 
 ## Changelog - 2023-2026
@@ -37,6 +35,7 @@ A lot has changed. New Server hardware, new virtualization platform, hardcore in
 - 2x Unifi-7-Pro-AP (Ubiquiti UniFi 7 Pro Access Point)<br>
 - 3x Unifi G5 Flex Camera
 - 1x Unifi G6 Turrent Camera
+- Unifi Cloud Key Gen 2 Plus
 
 ### Added to LINDS Site
 - LINDS-proxmox-01 (Dell T630 - Proxmox VE 9.1.4)<br>
@@ -45,6 +44,7 @@ A lot has changed. New Server hardware, new virtualization platform, hardcore in
 - talos-linds-worker-02 (Talos OS)<br>
 - 2x Unifi-6-AP (Ubiquiti UniFi 6 Access Point)<br>
 - 3x Unifi G5 Flex Camera
+- Unifi Cloud Key Gen 2 Plus
 
 # 2022 Half Year Update:
 

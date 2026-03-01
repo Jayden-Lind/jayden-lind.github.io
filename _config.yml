@@ -16,7 +16,7 @@ timezone: Australia/Melbourne
 
 title: Jayden Lind - Portfolio                          # the main title
 
-tagline: Homelab, Software Engineering, Security # it will display as the sub-title
+tagline: Homelab, Software Engineering, Security, Platforms, Performance # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
   Jayden Lind - Portfolio - Homelab, Software Engineering, Security
@@ -28,8 +28,8 @@ url: 'https://jayden-lind.github.io'
 github:
   username: jayden-lind
 
-twitter:
-  username: twitter_username # change to your Twitter username
+#twitter:
+#  username: twitter_username # change to your Twitter username
 
 social:
   # Change to your full name.
@@ -74,7 +74,7 @@ analytics:
 
 # Page views settings
 pageviews:
-  provider: # now only supports 'goatcounter'
+  provider: goatcounter # now only supports 'goatcounter'
 
 # Prefer color scheme setting.
 #
@@ -176,7 +176,7 @@ defaults:
       type: posts
     values:
       layout: post
-      comments: true # Enable comments in posts.
+      comments: false # Enable comments in posts.
       toc: true # Display TOC column in posts.
       # DO NOT modify the following parameter unless you are confident enough
       # to update the code of all other post links in this project.

@@ -2,7 +2,7 @@
 layout: post
 title: VLAN And Firewall Rules – DMZ
 #subtitle: Each post also has a subtitle
-tags: [homelab]
+tags: [Homelab]
 #comments: true
 ---
 <p>The website you are currently on, is located on my server at home. Having this hosted at home can bring some security issues. Having no firewall rules, can allow a compromised machine (Web Server) unfiltered access to the other networks, which could result in damage. I want to prevent this, and one of the best ways to achieve this, is by setting up firewall rules between the networks.</p>

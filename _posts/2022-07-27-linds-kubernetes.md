@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Moving to Kubernetes
-tags: [kubernetes, homelab]
+tags: [Kubernetes, Homelab]
 gh-repo: Jayden-Lind/LINDS-Kubernetes
 ---
 

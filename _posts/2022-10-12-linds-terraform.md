@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Implementing Terraform with vSphere
-tags: [terraform, homelab]
+title: From Ad-hoc to IaC - Managing a vSphere Homelab with Terraform & Packer
+tags: [Terraform, Homelab]
 gh-repo: Jayden-Lind/LINDS-Terraform
 ---
 
