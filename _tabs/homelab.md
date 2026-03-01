@@ -10,17 +10,22 @@ order: 1
 
 ![image](/img/2026/homelab.svg)
 
-A lot has changed. New Server hardware, new virtualization platform, hardcore into Kubernetes, and a lot of automation.
+A lot has changed since 2022 - new hardware, a new virtualisation platform, a fully declarative Kubernetes stack, and everything managed as code. Full write-up: [Homelab 2026: Rebuilding the Stack from Bare Metal Up]({% post_url 2026-03-01-homelab-update-2026 %})
 
-### Infrastructure Updates
-- **Hardware Upgrade**: Swapped the HPE DL360 G9 for a Lenovo SR655 (EPYC 3rd gen 64-core CPU, 256GB RAM).
-- **Virtualization**: Migrated both server nodes to Proxmox and using ZFS.
-- **IaC**: Upgraded from Puppet to Ansible, Terraform, and Packer for automated VM provisioning.
-- **Routing**: Upgraded routing to VyOS (replacing OPNSense).
+### Hardware & Virtualisation
+- **New Server**: Lenovo SR655 with a 3rd-gen AMD EPYC (64 cores) and 256GB RAM, replacing the HPE DL360 G9. Single-socket design eliminates cross-NUMA latency; significant improvement across all workloads.
+- **Proxmox VE**: Replaced ESXi on both nodes following VMware's licensing changes. Running ZFS for storage - transparent compression, checksumming, and no hardware RAID controller required.
 
-### Kubernetes & Automation
-- **Advanced Networking**: Extended Kubernetes cluster to use eBPF and established direct BGP peering with VyOS routers.
-- **Consolidation**: The Majority of services have been consolidated onto the Kubernetes cluster, reducing number of VM's and improving manageability.
+### Kubernetes
+- **Talos Linux**: Migrated Kubernetes nodes from Ubuntu + kubeadm to Talos - a minimal, immutable, SSH-less OS managed entirely through a declarative API. Eliminated an entire class of configuration drift and kernel upgrade fragility.
+- **Cilium + eBPF**: Replaced kube-proxy and Flannel with Cilium as the CNI. eBPF-based datapath does O(1) service lookups via kernel hash maps, removing the IPTables rule-chain overhead that grows linearly with service count.
+- **BGP peering**: Cilium's BGP control plane peers directly with VyOS, advertising `LoadBalancer` IPs across the network. No MetalLB required; node failure triggers automatic route withdrawal and instant failover.
+- **GitOps with ArgoCD**: All workloads managed via Helm charts and ArgoCD. Cluster state is fully reproducible from Git - blowing up a namespace and reconciling back takes minutes.
+- **Service consolidation**: Home automation, media, game servers, dev tooling, and infrastructure services all running on Kubernetes, managed uniformly via Helm and ArgoCD.
+
+### Routing & Automation
+- **VyOS**: Replaced OPNsense. Ansible-native CLI, Linux-based forwarding plane, and measurably lower CPU utilisation (20–30% on OPNsense → low single digits on VyOS).
+- **Full IaC**: Packer builds golden VM images, Terraform provisions VMs and bootstraps the Talos cluster, Ansible handles post-provision config and VyOS management. Everything is version-controlled and reproducible.
 
 ## Changelog - 2023-2026
 ### Added to JD Site
