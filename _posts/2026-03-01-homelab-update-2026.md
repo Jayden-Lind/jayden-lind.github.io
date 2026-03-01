@@ -118,8 +118,14 @@ Everything is version-controlled. Rebuilding any component from scratch is a `te
 
 ---
 
+
 ## What's Next
 
 - **Cluster API + Proxmox provider** - Allow Kubernetes to provision its own worker nodes on demand, rather than requiring manual Terraform runs for scaling.
 - **Tighter network segmentation** - VLAN separation between workload classes, enforced at both the VyOS layer and via Cilium network policy.
 - **Observability improvements** - Expanding eBPF-based metrics and flow visibility with Hubble to get deeper insight into service-to-service traffic patterns.
+
+---
+
+This covers the major changes I can recall - realistically there have been dozens of smaller iterations, fixes, and experiments along the way that didn't make the cut here. The homelab is a living system; something is always being tweaked, broken, and improved.
+
