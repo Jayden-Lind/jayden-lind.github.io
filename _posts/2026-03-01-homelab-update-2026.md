@@ -1,124 +1,125 @@
 ---
 layout: post
-title: "Homelab Update 2026: Talos, Cilium, VyOS, and a New Beast of a Server"
+title: "Homelab 2026: Rebuilding the Stack from Bare Metal Up"
 tags: [Kubernetes, Homelab, Terraform, Ansible, eBPF]
 gh-repo: Jayden-Lind/LINDS-Kubernetes
 ---
 
-It's been a while since I last wrote about the homelab, and a lot has changed. What started as a few CentOS VMs running Docker containers has evolved into a fully declarative, IaC-managed stack with a proper BGP routing topology, eBPF-powered networking, and a serious hardware upgrade. This post covers everything that's changed, why I made each decision, and what I ran into along the way.
+It's been a while since I last wrote about the homelab, and a lot has changed. What started as a few CentOS VMs running Docker containers has evolved into a fully declarative, IaC-managed stack - new hardware, a purpose-built Kubernetes OS, eBPF-powered networking, BGP routing, and everything managed as code. This post covers what changed, why each decision was made, and what I learned along the way.
 
 ---
 
 ## New Hardware - Lenovo SR655 (EPYC 7B13, 256GB RAM)
 
-The HPE DL360 G9 had served well, but it was starting to show some limitations and performance concerns. Performance woes with memory heavy workloads, like databases and running Kubernetes, not to mention the Dual CPU design, having latency impacts for workloads spread out across the 2 NUMA nodes. The 2x Intel Xeon E5-2660 v4 (28 cores total) was also a bit power inefficient. 
+The HPE DL360 G9 had served well, but its age was showing. Memory-heavy workloads - databases, Kubernetes, anything with working sets that didn't fit in L3 cache - were sluggish. The dual-socket design meant workloads spread across two NUMA nodes experienced noticeable inter-socket latency, and the 2× Intel Xeon E5-2660 v4 (28 cores total) wasn't exactly power-efficient.
 
-I replaced it with a **Lenovo ThinkSystem SR655** equipped with a 3rd gen AMD EPYC (64-core) and 256GB RAM. The jump in core count, L3 cache, memory bandwidth & channels has been significant, all workloads are significantly faster, more responsive, allowing my game servers to run at higher tick rates  more consistently.
+I replaced it with a **Lenovo ThinkSystem SR655** running a 3rd-gen AMD EPYC (64 cores) and 256GB RAM. The jump in core count, L3 cache size, and memory bandwidth has been significant across the board - all workloads are faster and more responsive, and game servers now sustain higher tick rates consistently.
 
-**Challenges:** The only challenges I had when migrating to this new server was migrating data.
+**Challenges:** The migration itself was straightforward - the main effort was safely moving data across.
 
-**Learning:** The per-core performance is excellent, but further optimisations can be done by ensuring VM's land only on a single AMD EPYC chiplet to avoid cross-chiplet accesses, which would result in higher latency.
+**Learning:** The single-socket EPYC design eliminates cross-socket latency entirely. Further gains are possible by pinning VMs to a single EPYC chiplet to avoid cross-chiplet memory accesses.
 
 ---
 
 ## Proxmox VE - Replacing ESXi
 
-With VMware's licensing changes making ESXi increasingly unviable for homelab use, I migrated to **Proxmox VE**. Since it is based on Debian, and uses KVM/QEMU, with a more recent version of the Linux Kernel, it has better hardware support, more modern features, and a much more flexible storage and networking stack compared to ESXi.
+VMware's post-Broadcom licensing changes made ESXi increasingly unviable for homelab use. I migrated to **Proxmox VE**, which is Debian-based, runs a recent Linux kernel, and has excellent hardware support, flexible networking, and no licensing overhead.
 
-I also setup the new Lenovo EPYC server to use **ZFS**, instead of relying on the hardware RAID controller. ZFS gives me compression and data integrity checking. I also was running into some performance issues with the HPE RAID controller.
+I also took the opportunity to ditch the hardware RAID controller in favour of **ZFS** directly on the host. ZFS gives me transparent compression, checksumming, and data integrity verification.
 
-**Challenges:** Migrating live VMs off ESXi without a shared storage layer between hypervisors meant careful sequencing - snapshot, export OVF, import, validate, decommission. Doing this for every VM was time-consuming and lead to lots of downtime.
+**Challenges:** Without shared storage between the old and new hypervisors, every VM migration required a full snapshot → OVF export → import → validate → decommission cycle. Time-consuming and downtime-heavy.
 
-**Learning:** ZFS on Proxmox has been fantastic. The performance is excellent, I should've used ZFS from the start, instead of using the hardware RAID card. There is a slight CPU cost to ZFS, but on my EPYC 3rd Gen 64 core, it's negligible and the benefits of compression and data integrity are worth it.
-
----
-
-## Talos Linux — Rethinking the Kubernetes OS
-
-My Kubernetes nodes were previously running Ubuntu, with ansible managing the configuration of kubeadm bootstrapping. This was flakey and was causing issues. Especially with eBPF and kernel updates, which would cause nodes to go into a bad state and require manual intervention. This lead to a lot of downtime and frustration.
-
-I decided to migrate to **[Talos Linux](https://www.talos.dev/)**, an OS purpose-built for running Kubernetes. There's no SSH, no package manager, no shell - the entire OS is configured through a declarative API and every change is applied via `talosctl` or through [LINDS-Terraform](https://github.com/Jayden-Lind/LINDS-Terraform).
-
-**Challenges:** Difficult to troubleshoot at first, since you can't just SSH in and poke around. You have to rely on `talosctl` for everything, which has a learning curve. Also, the initial setup of the cluster with Talos was a bit more complex than kubeadm, especially with integrating it into Terraform.
-
-**Learning:** I don't need to run everything on Ubuntu VM's. If there is a more specialised solution, like Talos for Kubernetes, it's worth the effort to migrate. The stability and security benefits of a minimal, immutable OS are significant, and the declarative configuration model fits well with my overall IaC approach.
+**Learning:** ZFS should've been the choice from day one. The CPU overhead on a 64-core EPYC is negligible, and getting data integrity and compression for free is a no-brainer. The Proxmox + ZFS combination is a win-win choice.
 
 ---
 
-## Migrating to ArgoCD and Helm charts for GitOps
+## Talos Linux - A Purpose-Built Kubernetes OS
 
-I was originally using raw manifests and some bash scripts to provision my Kubernetes cluster, which worked but was a bit clunky. I wanted a more Kubernetes-native way to manage my cluster configuration, and after some research decided upon **[ArgoCD](https://argo-cd.readthedocs.io/en/stable/)**. Upon implementing ArgoCD, I also migrated all my Kubernetes manifests into **[Helm charts](https://helm.sh/)** to take advantage of templating and better manage complexity as the number of services grew.
+My Kubernetes nodes were previously running Ubuntu, with Ansible managing `kubeadm` bootstrapping. It worked, but it was fragile - kernel updates would occasionally leave nodes in a broken state requiring manual intervention, and eBPF-dependent features were especially sensitive to kernel version changes.
 
-**Challenges:** Migrating the services I currently had deployed to Helm was a long battle of trying to find a chart that already existed for the service I wanted to host. Another challenge was ensuring ArgoCD sync statuses were all green.
+I migrated to **[Talos Linux](https://www.talos.dev/)**, an OS built exclusively for running Kubernetes. There's no SSH, no package manager, no shell - the entire OS is managed through a declarative API, with every change applied via [LINDS-Terraform](https://github.com/Jayden-Lind/LINDS-Terraform).
 
-**Learning:** The GitOps workflow with ArgoCD has made it so much easier to rebuild my Kubernetes cluster when I break it. Allows me to test things and recover quicker.
+**Challenges:** The lack of a shell makes initial troubleshooting unintuitive. You have to rely entirely on `talosctl` for diagnostics, which has a learning curve. Integrating Talos into Terraform for cluster bootstrapping also took some iteration to get right.
+
+**Learning:** Not every workload needs a general-purpose OS. A minimal, immutable, API-driven OS removes an entire class of configuration drift and upgrade risk. The stability improvement over Ubuntu + kubeadm was immediate and obvious.
 
 ---
 
-## Cilium & eBPF — Replacing kube-proxy
+## ArgoCD & Helm - GitOps for the Cluster
 
-The original cluster used [flannel](https://github.com/flannel-io/flannel) for networking and kube-proxy for service routing. In the effort of efficiency and performance, it didn't make sense to have another system daemon set running another pod, doing IPTables command, which is fine, but is not efficient for overall node CPU utilisation.
+I was previously managing Kubernetes workloads with raw manifests and some ad-hoc scripts. It worked, but rebuilding after a cluster failure was a slow, manual process and not reproducible. I adopted **[ArgoCD](https://argo-cd.readthedocs.io/en/stable/)** for GitOps-driven continuous delivery, and migrated all manifests to **[Helm charts](https://helm.sh/)** to handle templating and manage growing complexity.
 
-I initially tried Calico without eBPF, then turned on eBPF mode, and the performance was definitely noticable. Then when I switched to Talos, I decided to start fresh with **[Cilium](https://cilium.io/)** as the CNI plugin, which is the more common https://docs.cloud.google.com/kubernetes-engine/networking/docs network CNI in production environments, and has first class support for eBPF.
+**Challenges:** Finding or building the right Helm chart for each service took time. Getting every ArgoCD application to a healthy sync state - especially during the initial migration - required careful attention to resource ordering and dependencies.
 
-**Why eBPF matters here:** Traditional kube-proxy rewrites iptables rules for every service and endpoint. With hundreds of services, this becomes a long chain of sequential rule evaluations per packet. Cilium's eBPF programs use hash maps to do O(1) lookups regardless of cluster size, and because they run in kernel context, there's no netfilter overhead.
+**Learning:** The GitOps model pays dividends when things break. Being able to blow up a namespace and let ArgoCD reconcile it back to the desired state in minutes removes a huge amount of stress from cluster operations. It also makes experimentation much lower risk.
 
-**Challenges:** I ran Calico in eBPF mode for a while before switching to Cilium, and while it was good, trying to get config parity between Calico and Cilium was a bit of a headache. Cilium's documentation is good, but the sheer number of features and options can be overwhelming at first. This became apparent with BGP Peering, which took a bit of trial and error to get right.
+---
 
-**Learning:** How configurable Cilium is, and how much of the Kubernetes networking stack it can replace. It's not just a CNI plugin - it can handle service routing, load balancing, network policies, and even BGP peering. The eBPF-based datapath is a game changer for performance and scalability. I now see why Cilium is the default CNI for many managed Kubernetes services and is widely adopted in production environments.
+## Cilium & eBPF - Replacing kube-proxy
+
+The original cluster used [Flannel](https://github.com/flannel-io/flannel) for networking and kube-proxy for service routing. With growing service counts, the IPTables-based service routing was becoming a bottleneck - every packet traverses a linear chain of rules, and that chain grows with every service and endpoint.
+
+I trialled Calico in eBPF mode before ultimately switching to **[Cilium](https://cilium.io/)** when rebuilding on Talos. Cilium has first-class eBPF support, is the default CNI in several major managed Kubernetes offerings, and replaces kube-proxy entirely.
+
+**Why eBPF matters:** Traditional kube-proxy rewrites iptables rules for every service and endpoint. With many services, each packet traverses a long sequential chain of rules. Cilium's eBPF datapath uses kernel-resident hash maps for O(1) service lookups regardless of cluster size - no netfilter traversal, no user-space involvement.
+
+**Challenges:** Migrating from Calico to Cilium required a clean rebuild rather than an in-place swap. Cilium's feature surface is large, and getting BGP peering configured correctly between Cilium and VyOS took a few iterations.
+
+**Learning:** Cilium isn't just a CNI - it's a full networking platform covering service routing, load balancing, network policy, and BGP. Understanding how it replaces each layer of the traditional Kubernetes networking stack deepened my understanding of how production Kubernetes networking actually works at the kernel level.
 
 ---
 
 ## VyOS & BGP Peering with Kubernetes
 
-I moved from OPNsense to **[VyOS](https://vyos.io/)** for routing. VyOS is a network OS built for engineers - it's configured entirely through a structured CLI, integrates well with Ansible for automation, which was the main reason for picking it, as OPNSense's Ansible support is nonexistent.
+I moved from OPNsense to **[VyOS](https://vyos.io/)** for routing. The primary driver was Ansible integration - OPNsense has no real automation story, whereas VyOS is structured around a CLI that maps cleanly to Ansible playbooks. As a bonus, VyOS's Linux-based forwarding plane was measurably more efficient: CPU utilisation dropped from 20–30% on OPNsense to low single digits on VyOS under equivalent load.
 
-Another reason for switching to VyOS was because it is Linux/Debian based, which I found was more performant, I was using single digit CPU percentage on VyOS, compared to 20-30% on OPNSense, which was a bit concerning.
+The Kubernetes cluster [now peers directly with VyOS over BGP](https://github.com/Jayden-Lind/LINDS-Terraform/blob/main/proxmox/talos.tf#L362). Cilium's BGP control plane advertises `LoadBalancer` service IPs to VyOS, which redistributes them across the network. The result:
 
-The Kubernetes cluster (now peers)[https://github.com/Jayden-Lind/LINDS-Terraform/blob/main/proxmox/talos.tf#L362] directly with VyOS over BGP. Cilium's BGP control plane advertises service LoadBalancer IPs directly to VyOS, which then redistributes them into the rest of the network. This means:
+- No MetalLB required - Cilium handles load balancer IP advertisement natively
+- LoadBalancer IPs are reachable anywhere on the network without static routes
+- Node failure triggers automatic BGP route withdrawal and traffic reroutes instantly
+- External DNAT routing only needs to touch LoadBalancer IPs - internal service resolution stays within the cluster
 
-- No separate MetalLB required
-- Load balancer IPs are reachable from anywhere on the network without static routes
-- Failover is automatic - if a node goes down, BGP withdraws its routes and traffic shifts
-- I can use the Kubernetes native CoreDNS to just resolve service names to their ClusterIPs, and let BGP handle the routing. I only need to advertise the LoadBalancer IPs, for when I want to do DNAT routing from internet to a service.
+**Challenges:** Getting ASN configuration and route filters aligned between Cilium and VyOS took a few iterations. VyOS's BGP config (via FRR under the hood) is verbose, but behaves exactly as expected once the model is clear.
 
-**Challenges:** Getting the ASN configuration and route filters right between Cilium and VyOS took a few iterations. VyOS's BGP config is verbose but predictable once you understand the FRR underpinnings.
-
-**Learning:** Running BGP at home is a great way to actually understand how it works in production. The concepts of route advertisement, path selection, and graceful restart become very concrete when you're watching routes appear and disappear in real time.
+**Learning:** Running BGP at home makes production routing concepts concrete. Watching routes appear and disappear in real time - and seeing failover happen automatically - is the best way to understand path selection, route withdrawal, and graceful restart in practice.
 
 ---
 
-## Kubernetes Service Expansion
+## Kubernetes Service Consolidation
 
-With a stable, well-networked Kubernetes cluster in place, I migrated a number of services that had been running as standalone Docker containers or directly on VMs:
+With a stable cluster and solid networking in place, I migrated a range of workloads off standalone VMs and Docker hosts:
 
-- **Home automation** - Home Assistant
-- **Media** - *arr stack, Plex
-- **Game servers** - Factorio, Valheim, Satisfactory, Minecraft
-- **Dev services** - Github Action Runners, Postgres
-- **Infrastructure services** - internal DNS, monitoring, certificate management, secrets management
+| Category | Services |
+|---|---|
+| **Home automation** | Home Assistant, Mitsubishi heat pump integration |
+| **Media** | Plex, *arr stack |
+| **Game servers** | Factorio, Valheim, Satisfactory, Minecraft |
+| **Dev** | GitHub Actions runners, PostgreSQL |
+| **Infrastructure** | Internal DNS, monitoring, cert management, secrets management |
 
-This saved storage space by not having separate VM's for each service, and also made it easier to manage and update these services through Helm charts and ArgoCD, while also making it easier to monitor as it's all in a central place.
+Consolidating onto Kubernetes reduced VM sprawl, centralised observability, and made updates consistent across all services via Helm and ArgoCD.
 
 ---
 
 ## Full IaC - Terraform, Ansible & Packer
 
-The previous setup was a mix of manually created VMs, some Terraform, and Puppet. I've consolidated this into a clean three-tool stack:
+The previous setup was a patchwork of manually created VMs, partial Terraform coverage, and Puppet. I've replaced this with a clean three-tool stack:
 
-- **[Packer](https://github.com/Jayden-Lind/LINDS-Terraform/tree/main/packer)** - builds golden VM images for Proxmox (Ubuntu)
-- **[Terraform](https://github.com/Jayden-Lind/LINDS-Terraform)** - provisions all VMs, Talos node config, and cluster bootstrapping
-- **[Ansible](https://github.com/Jayden-Lind/LINDS-Ansible)** - post-provision configuration for non-Talos VMs and VyOS router management
+- **[Packer](https://github.com/Jayden-Lind/LINDS-Terraform/tree/main/packer)** - builds golden VM images for Proxmox
+- **[Terraform](https://github.com/Jayden-Lind/LINDS-Terraform)** - provisions VMs, Talos node configuration, and cluster bootstrapping
+- **[Ansible](https://github.com/Jayden-Lind/LINDS-Ansible)** - post-provision configuration for non-Talos VMs and VyOS management
 
-Everything is version-controlled. Rebuilding any part of the stack from scratch is a `terraform apply` and a `ansible-playbook` command away.
+Everything is version-controlled. Rebuilding any component from scratch is a `terraform apply` and `ansible-playbook` away.
 
-**Challenges:** Writing Ansible playbooks was initially hard, but with Github Copilot, it became much easier to get the syntax right and follow best practices. This made it easier, as I knew what I wanted, but didn't have the expertise to make it happen well in Ansible.
+**Challenges:** Ansible's syntax and best practices have a learning curve, particularly for idempotency and role structure.
 
-**Learning:** The investment in IaC pays off immediately when something goes wrong. Being able to diff the current state against the desired state, or simply tear down and redeploy a node, removes a huge amount of operational anxiety.
+**Learning:** IaC pays for itself the first time something breaks. Being able to diff desired state against actual state, or simply tear down and redeploy a node cleanly, removes operational anxiety and makes the whole system easier to reason about.
 
 ---
 
-## Future Plans
+## What's Next
 
-- **Cluster autoscaling / VM autoprovisioning** — Explore Cluster API with the Proxmox provider to allow Kubernetes to provision its own nodes on demand.
-- **Network segmentation** — Tighter VLAN separation between workload classes, enforced at the VyOS layer and with Cilium network policy.
+- **Cluster API + Proxmox provider** - Allow Kubernetes to provision its own worker nodes on demand, rather than requiring manual Terraform runs for scaling.
+- **Tighter network segmentation** - VLAN separation between workload classes, enforced at both the VyOS layer and via Cilium network policy.
+- **Observability improvements** - Expanding eBPF-based metrics and flow visibility with Hubble to get deeper insight into service-to-service traffic patterns.
