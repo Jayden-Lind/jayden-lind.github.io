@@ -10,7 +10,7 @@ order: 1
 ---
 # 2026 Update:
 
-![homelab](/img/2026/homelab.svg)
+![image](/img/2026/homelab.svg)
 
 A lot has changed. New Server hardware, new virtualization platform, hardcore into Kubernetes, and a lot of automation.
 
