@@ -6,26 +6,82 @@ icon: fas fa-info-circle
 tags: [homelab]
 order: 1
 ---
-# 2026 Update:
+# 2026 Update
 
 ![image](/img/2026/homelab.svg)
 
-A lot has changed since 2022 - new hardware, a new virtualisation platform, a fully declarative Kubernetes stack, and everything managed as code. Full write-up: [Homelab 2026: Rebuilding the Stack from Bare Metal Up]({% post_url 2026-03-01-homelab-update-2026 %})
+Full write-up: [Homelab 2026: Rebuilding the Stack from Bare Metal Up]({% post_url 2026-03-01-homelab-update-2026 %})
 
-### Hardware & Virtualisation
-- **New Server**: Lenovo SR655 with a 3rd-gen AMD EPYC (64 cores) and 256GB RAM, replacing the HPE DL360 G9. Single-socket design eliminates cross-NUMA latency; significant improvement across all workloads.
-- **Proxmox VE**: Replaced ESXi on both nodes following VMware's licensing changes. Running ZFS for storage - transparent compression, checksumming, and no hardware RAID controller required.
+### Hardware
 
-### Kubernetes
-- **Talos Linux**: Migrated Kubernetes nodes from Ubuntu + kubeadm to Talos - a minimal, immutable, SSH-less OS managed entirely through a declarative API. Eliminated an entire class of configuration drift and kernel upgrade fragility.
-- **Cilium + eBPF**: Replaced kube-proxy and Flannel with Cilium as the CNI. eBPF-based datapath does O(1) service lookups via kernel hash maps, removing the IPTables rule-chain overhead that grows linearly with service count.
-- **BGP peering**: Cilium's BGP control plane peers directly with VyOS, advertising `LoadBalancer` IPs across the network. No MetalLB required; node failure triggers automatic route withdrawal and instant failover.
-- **GitOps with ArgoCD**: All workloads managed via Helm charts and ArgoCD. Cluster state is fully reproducible from Git - blowing up a namespace and reconciling back takes minutes.
-- **Service consolidation**: Home automation, media, game servers, dev tooling, and infrastructure services all running on Kubernetes, managed uniformly via Helm and ArgoCD.
+Two physical sites running as a single Kubernetes cluster.
 
-### Routing & Automation
-- **VyOS**: Replaced OPNsense. Ansible-native CLI, Linux-based forwarding plane, and measurably lower CPU utilisation (20–30% on OPNsense → low single digits on VyOS).
-- **Full IaC**: Packer builds golden VM images, Terraform provisions VMs and bootstraps the Talos cluster, Ansible handles post-provision config and VyOS management. Everything is version-controlled and reproducible.
+**JD site:** Lenovo ThinkSystem SR655, AMD EPYC 7B13 (64 cores / 128 threads), 256GB Samsung DDR4 ECC @ 2933 MT/s, Proxmox VE 9.2.3. Single-socket design with a single NUMA domain eliminates cross-socket memory latency entirely.
+
+Storage (ZFS):
+- `NAS-SSD`: RAIDZ1 across 5x Samsung 870 EVO 4TB SSDs (18.2TB usable, 11TB used). NFS/iSCSI backing for Kubernetes PVs.
+- `VM`: RAIDZ1 across 3x mixed SSDs (1.62TB usable). VM disk pool.
+- `HDD-20T`: Mirrored pair of 20TB Seagate enterprise HDDs (20TB usable, 8TB used). Cold and bulk storage.
+
+**LINDS site:** Dell PowerEdge T630, 2x Intel Xeon E5-2640 v4 (20 cores / 40 threads, dual-socket NUMA), 128GB RAM, Proxmox VE 9.2.3. Storage via PERC H730 hardware RAID controller.
+
+Both sites run Ubiquiti UniFi switching and APs, with VyOS 1.5 (rolling) handling routing, BGP, RA VPN, DNS/DHCP, and site-to-site IPSec.
+
+### Terraform ([LINDS-Terraform](https://github.com/Jayden-Lind/LINDS-Terraform))
+
+Terraform provisions everything from bare Proxmox hosts to a running Kubernetes cluster.
+
+- **VM provisioning**: Uses the [bpg/proxmox](https://registry.terraform.io/providers/bpg/proxmox/latest) provider to create VMs across both sites. Packer builds golden images (Ubuntu 24.04, CentOS 9) that Terraform clones per host.
+- **Talos cluster bootstrap**: Generates Talos machine secrets, applies node configs to each control plane and worker, bootstraps etcd, and writes `kubeconfig` + `talosconfig` locally. The cluster is 1 control plane + 3 workers at JD (AMD EPYC), 2 workers at LINDS (Intel Xeon), all running Talos v1.13.2 and Kubernetes v1.36.0.
+- **Per-arch kernel tuning**: AMD and Intel nodes get separate Talos schematics with architecture-specific flags. Both disable all CPU vulnerability mitigations, set `transparent_hugepage=always`, pin the governor to `performance` (`amd_pstate=active` / `intel_pstate=active`), enable BBR congestion control, isolate RCU callbacks (`nohz_full`, `rcu_nocbs`), and apply tuned TCP buffer / conntrack sysctls.
+- **Cilium via Helm**: Cilium is deployed into `kube-system` directly from Terraform after bootstrap. kube-proxy is disabled; Cilium's eBPF datapath handles all service routing with O(1) kernel hash map lookups.
+- **BGP wiring**: Terraform applies `CiliumBGPClusterConfig` and `CiliumBGPPeerConfig` CRDs post-Cilium. JD nodes peer with VyOS at ASN 64512/64550; LINDS nodes at ASN 64513/64551. Cilium advertises the `172.16.1.0/24` LoadBalancer IP pool and pod CIDRs to VyOS, which redistributes them across both sites. No MetalLB.
+
+### Ansible ([LINDS-Ansible](https://github.com/Jayden-Lind/LINDS-Ansible))
+
+Handles all post-Terraform configuration for non-Talos hosts. 14 playbooks and roles:
+
+- **VyOS**: Full router config via `vyos.vyos` collection. BGP peering, IPSec site-to-site VPN, RA VPN, DNS/DHCP, NAT, firewall. VyOS itself gets kernel-level tuning (`disable-mitigations`, `network-throughput` mode, TCP buffer sysctls).
+- **TrueNAS**: NFS/iSCSI configuration for Kubernetes persistent volume backing.
+- **General services**: Plex, Minecraft, torrent hosts, dev VMs, WSL setup.
+- **Common baseline**: NTP, auto-updates, logrotate applied uniformly.
+
+### Kubernetes ([LINDS-Kubernetes](https://github.com/Jayden-Lind/LINDS-Kubernetes))
+
+All workloads managed via ArgoCD and Helm. The repo is ArgoCD `Application` manifests; reconciliation is fully automated. Rebuilding from scratch: `./app-deployment.sh` bootstraps ArgoCD, then it self-heals to the desired state.
+
+**Cluster:** 6 nodes (1 control plane + 5 workers), Talos v1.13.2, Kubernetes v1.36.0, all nodes `Ready` for 157 days.
+
+**Infrastructure layer**
+
+| Component | Details |
+|---|---|
+| Cilium 1.19 | CNI, kube-proxy replacement, eBPF datapath, BGP control plane, Hubble flow observability |
+| ArgoCD + image-updater | GitOps reconciliation; image-updater auto-bumps tags on new pushes |
+| cert-manager | Automatic TLS via Let's Encrypt |
+| Vault + external-secrets | Secrets management; external-secrets syncs Vault secrets into Kubernetes |
+| external-dns | Syncs LoadBalancer/Ingress hostnames to internal DNS automatically |
+| nginx-ingress | Ingress controller, running as a DaemonSet across all nodes |
+| kube-prometheus stack | Prometheus, Grafana, AlertManager, node-exporter on all 6 nodes |
+| Loki + Grafana Alloy | Log aggregation with pod log collection via Alloy |
+| OpenTelemetry (OBI) | eBPF-based auto-instrumentation DaemonSet; traces service calls without code changes |
+| CloudNativePG | PostgreSQL operator with barman-cloud continuous WAL archiving |
+| csi-nfs + csi-smb | NFS/SMB CSI drivers backed by TrueNAS |
+| GitHub Actions runners | Self-hosted runner controller (ARC) for homelab CI pipelines |
+| kube-descheduler | Periodic pod rebalancing across nodes |
+
+**Applications**
+
+| App | Notes |
+|---|---|
+| Immich | Self-hosted photo management, 3 ML inference replicas with GPU acceleration |
+| Home Assistant | Home automation |
+| Plex | Media server |
+| Factorio | Game server |
+| Mumble | Self-hosted voice server |
+| Catcrawl | Supermarket price scraper (personal project, runs CI via self-hosted runners) |
+| Stirling PDF | Self-hosted PDF tooling |
+| Zabbix | Infrastructure monitoring (server, web, Java gateway, agent on all nodes) |
 
 ## Changelog - 2023-2026
 ### Added to JD Site
