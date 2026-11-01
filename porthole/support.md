@@ -39,7 +39,8 @@ bypassed.
 Yes. On the first screen tap **Try the Demo Cluster**, or find it under **+ → Add Cluster**. It
 is a simulated cluster with sample apps that runs inside Porthole, so it needs no account and no
 network. Change anything you like; to put it back, touch and hold **Demo Cluster** in the cluster
-list and choose **Reset Demo Cluster**.
+list and choose **Reset Demo Data…**. The same button is in Settings, under Demo Cluster, beside
+a **Read-only** switch that shows the demo as Porthole shows any cluster marked read-only.
 
 ### How do I add my cluster?
 
@@ -50,11 +51,11 @@ kubectl config view --raw --flatten --minify
 ```
 
 Get the output onto your iPhone or iPad (Universal Clipboard, or AirDrop it to Files), then
-choose **+ → Add Cluster → Kubeconfig**. It contains credentials: treat it like a password and
-delete any copies afterwards.
+choose **+ → Add Cluster → Import a Kubeconfig**. It contains credentials: treat it like a
+password and delete any copies afterwards.
 
-You can also add a cluster by hand with **Add Cluster → Manual**: the server's address and a
-service account token.
+You can also add a cluster by hand with **Add Cluster → Enter Manually**: the server's address
+and a service account token.
 
 ### Which kinds of sign-in work?
 
@@ -75,8 +76,9 @@ Allow, turn on **Settings → Privacy & Security → Local Network → Porthole*
 
 ### It says the server's certificate isn't trusted
 
-Porthole checks the server against the certificate authority in your kubeconfig. If the cluster's
-certificate was replaced, or the kubeconfig came from a different cluster, export it again.
+Porthole checks the server against the certificate authority in your kubeconfig, or the one you
+entered for the cluster. If the cluster's certificate was replaced, or the kubeconfig came from a
+different cluster, export it again.
 
 ### My port forward stopped
 
@@ -86,9 +88,10 @@ Porthole.
 
 ### Why can't I change anything in a cluster?
 
-It may be marked read-only. Porthole then offers nothing that could change the cluster and
-refuses to send anything but reads. Turn it off by editing the cluster. If it isn't read-only,
-your credentials may not allow the change; the cluster's own access rules decide that.
+It may be marked read-only. Porthole then changes nothing in the cluster and opens no shells or
+file transfers in it, though you can still browse it, read its logs and forward ports. Turn it
+off by editing the cluster. If it isn't read-only, your credentials may not allow the change; the
+cluster's own access rules decide that.
 
 ### How do I remove my data?
 

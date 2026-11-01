@@ -84,9 +84,12 @@ Porthole is a tool for people who run Kubernetes clusters. It isn't directed at 
 ## Security
 
 Credentials live only in the keychain. Porthole checks each server's certificate, against the
-certificate authority in your kubeconfig when it names one, unless the kubeconfig itself turns
-that check off. A cluster marked read-only is sent nothing but reads. If you find a security
-problem, please email me at jayden@linds.com.au rather than reporting it publicly.
+certificate authority you gave it for that cluster when there is one, unless you or your
+kubeconfig turn that check off for the cluster, which Porthole then marks "TLS not verified".
+Porthole changes nothing in a cluster marked read-only, and opens no shells or file transfers in
+it. Port forwarding stays available, and what you do through a forwarded port is up to the
+service behind it. If you find a security problem, please email me at jayden@linds.com.au
+rather than reporting it publicly.
 
 ## Changes to this policy
 
