@@ -25,7 +25,7 @@ Two sites, JD and LINDS, each with one Proxmox host, one router VM and a handful
 
 The biggest change. Both sites now run a **Debian 13** VM as the router: `jd-router-01` first, then `linds-router-01` on 6 November. The VyOS role is deleted from the Ansible repo.
 
-VyOS did the job, but it is its own configuration language on top of the tools that do the work. The routers now run those tools directly, from Debian packages, with their own config files in Git:
+VyOS did the job, but three things pushed me off it: its kernel was older than I wanted, some strongSwan options I needed were not available through its configuration, and I wanted UPnP back. On plain Debian the routers run the tools directly, from Debian packages, with their own config files in Git:
 
 - **systemd-networkd** for interfaces, VLANs and WireGuard
 - **nftables** with a flowtable for the firewall and NAT
@@ -34,6 +34,7 @@ VyOS did the job, but it is its own configuration language on top of the tools t
 - **Unbound** forwarding to Quad9 over DNS over TLS, **Kea** for DHCP with dynamic DNS, **chrony** for NTP
 - **Suricata** on WAN traffic, plus a second inline instance at JD that can block new connections to the published ports
 - **avahi** as an mDNS reflector, so AirPlay, Cast and HomeKit work across VLANs while the IoT devices stay isolated
+- **miniupnpd** for UPnP, so consoles and games can open their own ports
 
 One Ansible role builds both routers. The site differences are a few files and feature switches. A `router` command on the box answers the usual questions (tunnel, BGP, DNS, DHCP leases, what Suricata blocked), and both routers export metrics to Prometheus with a Grafana dashboard.
 
