@@ -6,7 +6,74 @@ icon: fas fa-info-circle
 tags: [homelab]
 order: 1
 ---
-# 2026 Update
+# November 2026 Update
+
+Drawn from the live state of the lab on 20 November 2026. Full write-up: [Homelab, Late 2026: New Routers, New Storage, and Merge-to-Deploy]({% post_url 2026-11-20-homelab-update-late-2026 %})
+
+### Network
+
+![Network diagram: two sites, each with a Debian router, joined by an IPsec tunnel with BGP across it](/img/2026/network-light.svg){: .light }
+![Network diagram: two sites, each with a Debian router, joined by an IPsec tunnel with BGP across it](/img/2026/network-dark.svg){: .dark }
+
+Each site has a Debian 13 router VM (`jd-router-01`, `linds-router-01`) built by one Ansible role: nftables, FRR, strongSwan, Unbound, Kea, chrony, Suricata and an mDNS reflector. The routers hold an IKEv2 tunnel and exchange routes over eBGP (AS 64550 and AS 64551). The Kubernetes nodes of each site peer with their router (AS 64512 and AS 64513) and announce the LoadBalancer pool `172.16.1.0/24`.
+
+| Site | Network | Subnet | Use |
+|---|---|---|---|
+| JD | LAN | `10.0.50.0/24` | Servers, desktops, Wi-Fi |
+| JD | VLAN 52 | `10.0.52.0/24` | IoT and UniFi devices, isolated |
+| JD | VLAN 53 | `10.0.53.0/24` | Kubernetes nodes |
+| JD | VLAN 58 | `10.0.58.0/24` | Media devices, VPN egress |
+| LINDS | LAN | `192.168.6.0/24` | Servers, desktops, Wi-Fi |
+| LINDS | VLAN 300 | `10.3.1.0/24` | Servers, Kubernetes nodes |
+| LINDS | VLAN 80 | `10.0.80.0/24` | Management: access points, switch |
+| LINDS | VLAN 110 | `10.0.110.0/24` | Cameras |
+| LINDS | VLAN 36 | `10.0.36.0/24` | VPN-only egress |
+
+### Compute and storage
+
+![Compute and storage diagram: the two Proxmox hosts, their guests, the storage pools and the backup paths](/img/2026/compute-light.svg){: .light }
+![Compute and storage diagram: the two Proxmox hosts, their guests, the storage pools and the backup paths](/img/2026/compute-dark.svg){: .dark }
+
+**JD site:** Lenovo ThinkSystem SR655, AMD EPYC 7B13 (64 cores / 128 threads), 256GB RAM, Proxmox VE 9.2 on kernel 7.3. Three ZFS pools: `VM` (SSD RAIDZ1, 1.6TB), `NAS-SSD` (SSD RAIDZ1, 18.2TB) and `HDD-20T` (HDD mirror, 20TB). The host is also the iSCSI and NFS server for the cluster.
+
+**LINDS site:** Dell PowerEdge T630, 2x Intel Xeon E5-2640 v4 (20 cores / 40 threads), 128GB RAM, Proxmox VE 9.2. PERC H730 hardware RAID under LVM-thin.
+
+### Kubernetes ([LINDS-Kubernetes](https://github.com/Jayden-Lind/LINDS-Kubernetes))
+
+![Kubernetes diagram: seven Talos nodes in two zones, and the platform layers and workloads](/img/2026/kubernetes-light.svg){: .light }
+![Kubernetes diagram: seven Talos nodes in two zones, and the platform layers and workloads](/img/2026/kubernetes-dark.svg){: .dark }
+
+**Cluster:** 7 nodes (1 control plane + 4 workers at JD, 2 workers at LINDS), Talos v1.14.6, Kubernetes v1.37.2, Cilium 1.20.5, 37 Argo CD applications.
+
+### How it is deployed
+
+- [LINDS-Terraform](https://github.com/Jayden-Lind/LINDS-Terraform): the guests, the Packer templates (Ubuntu, Windows Server 2025), Talos and Cilium. Talos and Cilium changes apply from a timer every six hours.
+- [LINDS-Ansible](https://github.com/Jayden-Lind/LINDS-Ansible): the routers, the Proxmox hosts, the Windows domain and file servers, the Linux VMs. A merge to `main` applies within about five minutes.
+- [LINDS-Kubernetes](https://github.com/Jayden-Lind/LINDS-Kubernetes): Argo CD app of apps.
+- Each pull request shows a preview of what a merge will apply. Renovate opens the version updates for all three repos.
+
+## Changelog - March to November 2026
+
+### Added
+- jd-router-01, linds-router-01 (Debian 13 routers)<br>
+- talos-worker-04 (Talos OS)<br>
+- jd-s3-01 (versitygw S3 gateway, LXC)<br>
+- jd-backup-01 (weekly Backblaze run of the NAS)<br>
+- jd-dc-01, jd-fs-01, linds-dc, linds-dc2 rebuilt on Windows Server 2025 from a Packer template<br>
+- democratic-csi (ZFS over iSCSI from the Proxmox host)<br>
+- Keycloak (single sign-on from Active Directory), Kyverno, an mTLS-only ingress<br>
+- Hardware, router and storage monitoring in Prometheus; Windows event logs and syslog in Loki<br>
+- Suricata on both routers<br>
+- Minecraft (Paper)<br>
+
+### Removed
+- JD-VyOS-01, LINDS-VyOS-01 (VyOS 1.5 rolling)<br>
+- TrueNAS at JD (the host owns the ZFS pools now)<br>
+- MinIO<br>
+- Zabbix<br>
+- Valheim<br>
+
+# March 2026 Update
 
 ![image](/img/2026/homelab.svg)
 

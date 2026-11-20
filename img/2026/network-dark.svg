@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 965" width="960" height="965" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif">
+<title>Homelab network</title>
+<desc>Two sites, JD and LINDS. Each has a Debian router VM behind an NBN service. The routers are joined by an IPsec tunnel and exchange routes over BGP. Each site has a main LAN and several VLANs.</desc>
+<rect width="960" height="965" rx="14" fill="#0d1117"/>
+<text x="24" y="38" font-size="21" fill="#e6edf3" font-weight="700">Network</text>
+<text x="24" y="59" font-size="12.5" fill="#9da9b6">Two sites, one routed network. Read from the routers on 20 Nov 2026.</text>
+<rect x="24" y="80" width="262" height="59" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="32" y="89" width="3.5" height="41" rx="1.75" fill="#8b97a5"/>
+<text x="45" y="103" font-size="13.5" fill="#e6edf3" font-weight="650">Cloudflare</text>
+<text x="45" y="122" font-size="12" fill="#9da9b6">Public DNS, dynamic DNS for each site</text>
+<rect x="349" y="80" width="262" height="59" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="357" y="89" width="3.5" height="41" rx="1.75" fill="#8b97a5"/>
+<text x="370" y="103" font-size="13.5" fill="#e6edf3" font-weight="650">Internet</text>
+<text x="370" y="122" font-size="12" fill="#9da9b6">IPv4 and IPv6 at both sites</text>
+<rect x="674" y="80" width="262" height="59" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="682" y="89" width="3.5" height="41" rx="1.75" fill="#8b97a5"/>
+<text x="695" y="103" font-size="13.5" fill="#e6edf3" font-weight="650">Remote devices</text>
+<text x="695" y="122" font-size="12" fill="#9da9b6">IKEv2 remote-access VPN into JD</text>
+<path d="M286,109 L349,109" fill="none" stroke="#8b97a5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M674,109 L611,109" fill="none" stroke="#b694f6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 4"/>
+<polygon points="609.5,109.0 617.3,106.0 617.3,112.0" fill="#b694f6"/>
+<path d="M480,139 L480,166 L210,166 L210,206" fill="none" stroke="#8b97a5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M480,166 L750,166 L750,206" fill="none" stroke="#8b97a5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="285.033" y="158.5" width="65.935" height="17.5" rx="4" fill="#0d1117"/>
+<text x="318" y="170" font-size="11.5" fill="#9da9b6" font-weight="500" text-anchor="middle">NBN HFC</text>
+<rect x="604.893" y="158.5" width="74.215" height="17.5" rx="4" fill="#0d1117"/>
+<text x="642" y="170" font-size="11.5" fill="#9da9b6" font-weight="500" text-anchor="middle">NBN FTTP</text>
+<text x="24" y="196" font-size="10.5" fill="#6b7785" font-weight="700" letter-spacing="0.9">SITE JD</text>
+<text x="936" y="196" font-size="10.5" fill="#6b7785" font-weight="700" text-anchor="end" letter-spacing="0.9">SITE LINDS</text>
+<rect x="24" y="206" width="372" height="110" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="32" y="215" width="3.5" height="92" rx="1.75" fill="#58a6ff"/>
+<text x="45" y="229" font-size="13.5" fill="#e6edf3" font-weight="650" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">jd-router-01</text>
+<text x="382" y="229" font-size="11.5" fill="#58a6ff" font-weight="600" text-anchor="end">AS 64550</text>
+<text x="45" y="248" font-size="12" fill="#9da9b6">Debian 13 VM · nftables with a flowtable</text>
+<text x="45" y="265" font-size="12" fill="#9da9b6">FRR BGP · strongSwan IPsec · WireGuard</text>
+<text x="45" y="282" font-size="12" fill="#9da9b6">Unbound to Quad9 over TLS · Kea DHCP · chrony</text>
+<text x="45" y="299" font-size="12" fill="#9da9b6">Suricata IDS + inline IPS · mDNS reflector · UPnP</text>
+<rect x="564" y="206" width="372" height="110" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="572" y="215" width="3.5" height="92" rx="1.75" fill="#58a6ff"/>
+<text x="585" y="229" font-size="13.5" fill="#e6edf3" font-weight="650" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">linds-router-01</text>
+<text x="922" y="229" font-size="11.5" fill="#58a6ff" font-weight="600" text-anchor="end">AS 64551</text>
+<text x="585" y="248" font-size="12" fill="#9da9b6">Debian 13 VM · nftables with a flowtable</text>
+<text x="585" y="265" font-size="12" fill="#9da9b6">FRR BGP · strongSwan IPsec · WireGuard</text>
+<text x="585" y="282" font-size="12" fill="#9da9b6">Unbound to Quad9 over TLS · Kea DHCP · chrony</text>
+<text x="585" y="299" font-size="12" fill="#9da9b6">Suricata IDS · mDNS reflector · UPnP</text>
+<path d="M402,261 L558,261" fill="none" stroke="#b694f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 4"/>
+<polygon points="559.5,261.0 551.7,264.0 551.7,258.0" fill="#b694f6"/>
+<polygon points="400.5,261.0 408.3,258.0 408.3,264.0" fill="#b694f6"/>
+<text x="480" y="235" font-size="12.5" fill="#e6edf3" font-weight="650" text-anchor="middle">IPsec IKEv2</text>
+<text x="480" y="251" font-size="11.5" fill="#9da9b6" text-anchor="middle">route-based tunnel</text>
+<text x="480" y="281" font-size="11.5" fill="#9da9b6" text-anchor="middle">eBGP across it</text>
+<text x="480" y="297" font-size="11.5" fill="#9da9b6" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">10.255.0.0/30</text>
+<path d="M210,316 L210,340" fill="none" stroke="#58a6ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="24" y="340" width="448" height="487" rx="10" fill="#151b23" stroke="#303a48" stroke-width="1"/>
+<text x="40" y="364" font-size="10.5" fill="#6b7785" font-weight="700" letter-spacing="0.9">NETWORKS</text>
+<rect x="40" y="376" width="74" height="24" rx="12" fill="#58a6ff" fill-opacity="0.14" stroke="#58a6ff" stroke-width="1" stroke-opacity="0.55"/>
+<text x="77" y="392.025" font-size="11.5" fill="#e6edf3" font-weight="500" text-anchor="middle">LAN</text>
+<text x="126" y="392.5" font-size="12" fill="#e6edf3" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">10.0.50.0/24</text>
+<text x="246" y="392.5" font-size="12" fill="#9da9b6">Servers, desktops, Wi-Fi</text>
+<rect x="40" y="410" width="74" height="24" rx="12" fill="#58a6ff" fill-opacity="0.14" stroke="#58a6ff" stroke-width="1" stroke-opacity="0.55"/>
+<text x="77" y="426.025" font-size="11.5" fill="#e6edf3" font-weight="500" text-anchor="middle">VLAN 52</text>
+<text x="126" y="426.5" font-size="12" fill="#e6edf3" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">10.0.52.0/24</text>
+<text x="246" y="426.5" font-size="12" fill="#9da9b6">IoT + UniFi devices · isolated</text>
+<rect x="40" y="444" width="74" height="24" rx="12" fill="#3fc5b0" fill-opacity="0.14" stroke="#3fc5b0" stroke-width="1" stroke-opacity="0.55"/>
+<text x="77" y="460.025" font-size="11.5" fill="#e6edf3" font-weight="500" text-anchor="middle">VLAN 53</text>
+<text x="126" y="460.5" font-size="12" fill="#e6edf3" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">10.0.53.0/24</text>
+<text x="246" y="460.5" font-size="12" fill="#9da9b6">Kubernetes nodes · AS 64512</text>
+<rect x="40" y="478" width="74" height="24" rx="12" fill="#b694f6" fill-opacity="0.14" stroke="#b694f6" stroke-width="1" stroke-opacity="0.55"/>
+<text x="77" y="494.025" font-size="11.5" fill="#e6edf3" font-weight="500" text-anchor="middle">VLAN 58</text>
+<text x="126" y="494.5" font-size="12" fill="#e6edf3" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">10.0.58.0/24</text>
+<text x="246" y="494.5" font-size="12" fill="#9da9b6">Media devices · VPN egress</text>
+<rect x="40" y="512" width="74" height="24" rx="12" fill="#b694f6" fill-opacity="0.14" stroke="#b694f6" stroke-width="1" stroke-opacity="0.55"/>
+<text x="77" y="528.025" font-size="11.5" fill="#e6edf3" font-weight="500" text-anchor="middle">VLAN 51</text>
+<text x="126" y="528.5" font-size="12" fill="#e6edf3" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">10.0.51.0/24</text>
+<text x="246" y="528.5" font-size="12" fill="#9da9b6">Spare · VPN-only egress</text>
+<rect x="40" y="546" width="74" height="24" rx="12" fill="#8b97a5" fill-opacity="0.14" stroke="#8b97a5" stroke-width="1" stroke-opacity="0.55"/>
+<text x="77" y="562.025" font-size="11.5" fill="#e6edf3" font-weight="500" text-anchor="middle">VLAN 99</text>
+<text x="126" y="562.5" font-size="12" fill="#e6edf3" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">cellular modem</text>
+<text x="246" y="562.5" font-size="12" fill="#9da9b6">Backup WAN · switched off</text>
+<text x="40" y="606" font-size="10.5" fill="#6b7785" font-weight="700" letter-spacing="0.9">SWITCHING AND WI-FI</text>
+<rect x="40" y="620" width="416" height="59" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="48" y="629" width="3.5" height="41" rx="1.75" fill="#58a6ff"/>
+<text x="61" y="643" font-size="13.5" fill="#e6edf3" font-weight="650">USW Enterprise 24 PoE + 8 PoE</text>
+<text x="61" y="662" font-size="12" fill="#9da9b6">UniFi switches, SFP+ link between them</text>
+<rect x="40" y="687" width="416" height="59" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="48" y="696" width="3.5" height="41" rx="1.75" fill="#58a6ff"/>
+<text x="61" y="710" font-size="13.5" fill="#e6edf3" font-weight="650">2 × U7 Pro</text>
+<text x="61" y="729" font-size="12" fill="#9da9b6">Wi-Fi 7 access points</text>
+<rect x="40" y="754" width="416" height="59" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="48" y="763" width="3.5" height="41" rx="1.75" fill="#58a6ff"/>
+<text x="61" y="777" font-size="13.5" fill="#e6edf3" font-weight="650">Cloud Key Gen2 Plus</text>
+<text x="61" y="796" font-size="12" fill="#9da9b6">UniFi Network and Protect, cameras on VLAN 52</text>
+<path d="M750,316 L750,340" fill="none" stroke="#58a6ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="488" y="340" width="448" height="487" rx="10" fill="#151b23" stroke="#303a48" stroke-width="1"/>
+<text x="504" y="364" font-size="10.5" fill="#6b7785" font-weight="700" letter-spacing="0.9">NETWORKS</text>
+<rect x="504" y="376" width="74" height="24" rx="12" fill="#58a6ff" fill-opacity="0.14" stroke="#58a6ff" stroke-width="1" stroke-opacity="0.55"/>
+<text x="541" y="392.025" font-size="11.5" fill="#e6edf3" font-weight="500" text-anchor="middle">LAN</text>
+<text x="590" y="392.5" font-size="12" fill="#e6edf3" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">192.168.6.0/24</text>
+<text x="710" y="392.5" font-size="12" fill="#9da9b6">Servers, desktops, Wi-Fi</text>
+<rect x="504" y="410" width="74" height="24" rx="12" fill="#3fc5b0" fill-opacity="0.14" stroke="#3fc5b0" stroke-width="1" stroke-opacity="0.55"/>
+<text x="541" y="426.025" font-size="11.5" fill="#e6edf3" font-weight="500" text-anchor="middle">VLAN 300</text>
+<text x="590" y="426.5" font-size="12" fill="#e6edf3" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">10.3.1.0/24</text>
+<text x="710" y="426.5" font-size="12" fill="#9da9b6">Servers, Kubernetes · AS 64513</text>
+<rect x="504" y="444" width="74" height="24" rx="12" fill="#58a6ff" fill-opacity="0.14" stroke="#58a6ff" stroke-width="1" stroke-opacity="0.55"/>
+<text x="541" y="460.025" font-size="11.5" fill="#e6edf3" font-weight="500" text-anchor="middle">VLAN 80</text>
+<text x="590" y="460.5" font-size="12" fill="#e6edf3" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">10.0.80.0/24</text>
+<text x="710" y="460.5" font-size="12" fill="#9da9b6">Management · APs, switch</text>
+<rect x="504" y="478" width="74" height="24" rx="12" fill="#58a6ff" fill-opacity="0.14" stroke="#58a6ff" stroke-width="1" stroke-opacity="0.55"/>
+<text x="541" y="494.025" font-size="11.5" fill="#e6edf3" font-weight="500" text-anchor="middle">VLAN 110</text>
+<text x="590" y="494.5" font-size="12" fill="#e6edf3" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">10.0.110.0/24</text>
+<text x="710" y="494.5" font-size="12" fill="#9da9b6">Cameras</text>
+<rect x="504" y="512" width="74" height="24" rx="12" fill="#b694f6" fill-opacity="0.14" stroke="#b694f6" stroke-width="1" stroke-opacity="0.55"/>
+<text x="541" y="528.025" font-size="11.5" fill="#e6edf3" font-weight="500" text-anchor="middle">VLAN 36</text>
+<text x="590" y="528.5" font-size="12" fill="#e6edf3" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">10.0.36.0/24</text>
+<text x="710" y="528.5" font-size="12" fill="#9da9b6">VPN-only egress</text>
+<text x="504" y="606" font-size="10.5" fill="#6b7785" font-weight="700" letter-spacing="0.9">SWITCHING AND WI-FI</text>
+<rect x="504" y="620" width="416" height="59" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="512" y="629" width="3.5" height="41" rx="1.75" fill="#58a6ff"/>
+<text x="525" y="643" font-size="13.5" fill="#e6edf3" font-weight="650">HPE OfficeConnect 1920S 24G PoE+</text>
+<text x="525" y="662" font-size="12" fill="#9da9b6">linds-switch-01, the core switch</text>
+<rect x="504" y="687" width="416" height="59" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="512" y="696" width="3.5" height="41" rx="1.75" fill="#58a6ff"/>
+<text x="525" y="710" font-size="13.5" fill="#e6edf3" font-weight="650">EdgeRouter X SFP</text>
+<text x="525" y="729" font-size="12" fill="#9da9b6">linds-switch-02, used only as a VLAN switch</text>
+<rect x="504" y="754" width="416" height="59" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="512" y="763" width="3.5" height="41" rx="1.75" fill="#58a6ff"/>
+<text x="525" y="777" font-size="13.5" fill="#e6edf3" font-weight="650">UniFi access points + Cloud Key</text>
+<text x="525" y="796" font-size="12" fill="#9da9b6">Wi-Fi on the LAN, managed on VLAN 80</text>
+<rect x="24" y="843" width="912" height="76" rx="10" fill="#151b23" stroke="#303a48" stroke-width="1"/>
+<rect x="40" y="855" width="3.5" height="52" rx="1.75" fill="#3fc5b0"/>
+<text x="54" y="870" font-size="13" fill="#e6edf3" font-weight="650">Kubernetes on the network</text>
+<text x="54" y="890" font-size="12" fill="#9da9b6">Cilium announces the LoadBalancer pool 172.16.1.0/24 and the pod networks to each site's router over eBGP.</text>
+<text x="54" y="908" font-size="12" fill="#9da9b6">The routers pass them across the tunnel, so a service address works from both sites and from the VPN.</text>
+<rect x="24" y="938" width="10" height="10" rx="3" fill="#58a6ff"/>
+<text x="40" y="947" font-size="11.5" fill="#9da9b6">Routing and switching</text>
+<rect x="196.55" y="938" width="10" height="10" rx="3" fill="#3fc5b0"/>
+<text x="212.55" y="947" font-size="11.5" fill="#9da9b6">Kubernetes</text>
+<rect x="301.25" y="938" width="10" height="10" rx="3" fill="#b694f6"/>
+<text x="317.25" y="947" font-size="11.5" fill="#9da9b6">VPN and tunnels</text>
+<rect x="438.15" y="938" width="10" height="10" rx="3" fill="#8b97a5"/>
+<text x="454.15" y="947" font-size="11.5" fill="#9da9b6">Outside, or not in use</text>
+</svg>

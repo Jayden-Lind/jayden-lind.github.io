@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 995" width="960" height="995" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif">
+<title>Homelab compute and storage</title>
+<desc>Two Proxmox hosts, one at each site, the guests on each, the storage pools, and the four paths that protect the data.</desc>
+<rect width="960" height="995" rx="14" fill="#0d1117"/>
+<text x="24" y="38" font-size="21" fill="#e6edf3" font-weight="700">Compute and storage</text>
+<text x="24" y="59" font-size="12.5" fill="#9da9b6">Two Proxmox VE 9.2 hosts and everything they run. Read from the hosts on 20 Nov 2026.</text>
+<rect x="24" y="80" width="448" height="621" rx="10" fill="#151b23" stroke="#303a48" stroke-width="1"/>
+<text x="40" y="110" font-size="16" fill="#e6edf3" font-weight="700" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">jd-proxmox-02</text>
+<text x="456" y="108" font-size="10.5" fill="#6b7785" font-weight="700" text-anchor="end" letter-spacing="0.9">SITE JD</text>
+<text x="40" y="130" font-size="12" fill="#9da9b6">Lenovo ThinkSystem SR655 · EPYC 7B13, 64 cores · 256 GB</text>
+<text x="40" y="147" font-size="12" fill="#9da9b6">Kernel 7.3 · ZFS · also the cluster's iSCSI and NFS server</text>
+<path d="M40,160 L456,160" fill="none" stroke="#303a48" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="40" y="180" font-size="10.5" fill="#6b7785" font-weight="700" letter-spacing="0.9">GUESTS</text>
+<rect x="42" y="199" width="9" height="9" rx="3" fill="#58a6ff"/>
+<text x="60" y="208" font-size="12" fill="#e6edf3" font-weight="600" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">jd-router-01</text>
+<text x="256" y="208" font-size="12" fill="#9da9b6">Debian 13 · router, firewall</text>
+<rect x="42" y="229" width="9" height="9" rx="3" fill="#3fc5b0"/>
+<text x="60" y="238" font-size="12" fill="#e6edf3" font-weight="600" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">talos-cp</text>
+<text x="256" y="238" font-size="12" fill="#9da9b6">Talos · control plane, etcd</text>
+<rect x="42" y="259" width="9" height="9" rx="3" fill="#3fc5b0"/>
+<text x="60" y="268" font-size="12" fill="#e6edf3" font-weight="600" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">talos-worker-01 … 04</text>
+<text x="256" y="268" font-size="12" fill="#9da9b6">Talos · 4 × 8 vCPU / 16 GB</text>
+<rect x="42" y="289" width="9" height="9" rx="3" fill="#b694f6"/>
+<text x="60" y="298" font-size="12" fill="#e6edf3" font-weight="600" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">jd-dc-01</text>
+<text x="256" y="298" font-size="12" fill="#9da9b6">Server 2025 · AD, DNS</text>
+<rect x="42" y="319" width="9" height="9" rx="3" fill="#b694f6"/>
+<text x="60" y="328" font-size="12" fill="#e6edf3" font-weight="600" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">jd-fs-01</text>
+<text x="256" y="328" font-size="12" fill="#9da9b6">Server 2025 · SMB, DFS-R</text>
+<rect x="42" y="349" width="9" height="9" rx="3" fill="#b694f6"/>
+<text x="60" y="358" font-size="12" fill="#e6edf3" font-weight="600" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">jd-jump-01</text>
+<text x="256" y="358" font-size="12" fill="#9da9b6">Ubuntu · IaC deploy runs</text>
+<rect x="42" y="379" width="9" height="9" rx="3" fill="#b694f6"/>
+<text x="60" y="388" font-size="12" fill="#e6edf3" font-weight="600" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">jd-torrent-01</text>
+<text x="256" y="388" font-size="12" fill="#9da9b6">qBittorrent</text>
+<rect x="42" y="409" width="9" height="9" rx="3" fill="#e3b341"/>
+<text x="60" y="418" font-size="12" fill="#e6edf3" font-weight="600" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">jd-backup-01</text>
+<text x="256" y="418" font-size="12" fill="#9da9b6">Weekly Backblaze run</text>
+<rect x="42" y="439" width="9" height="9" rx="3" fill="#e3b341"/>
+<text x="60" y="448" font-size="12" fill="#e6edf3" font-weight="600" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">jd-s3-01 (LXC)</text>
+<text x="256" y="448" font-size="12" fill="#9da9b6">versitygw · S3 object store</text>
+<text x="40" y="486" font-size="10.5" fill="#6b7785" font-weight="700" letter-spacing="0.9">STORAGE</text>
+<rect x="40" y="500" width="416" height="59" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="48" y="509" width="3.5" height="41" rx="1.75" fill="#e3b341"/>
+<text x="61" y="523" font-size="13.5" fill="#e6edf3" font-weight="650" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">VM · 1.6 TB</text>
+<text x="442" y="523" font-size="11.5" fill="#e3b341" font-weight="600" text-anchor="end">SSD RAIDZ1</text>
+<text x="61" y="542" font-size="12" fill="#9da9b6">VM disks, 16 Kubernetes iSCSI volumes, NFS, S3 data</text>
+<rect x="40" y="567" width="416" height="59" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="48" y="576" width="3.5" height="41" rx="1.75" fill="#e3b341"/>
+<text x="61" y="590" font-size="13.5" fill="#e6edf3" font-weight="650" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">NAS-SSD · 18.2 TB</text>
+<text x="442" y="590" font-size="11.5" fill="#e3b341" font-weight="600" text-anchor="end">SSD RAIDZ1</text>
+<text x="61" y="609" font-size="12" fill="#9da9b6">The file server's data disk (jd-fs-01)</text>
+<rect x="40" y="634" width="416" height="59" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="48" y="643" width="3.5" height="41" rx="1.75" fill="#e3b341"/>
+<text x="61" y="657" font-size="13.5" fill="#e6edf3" font-weight="650" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">HDD-20T · 20 TB</text>
+<text x="442" y="657" font-size="11.5" fill="#e3b341" font-weight="600" text-anchor="end">HDD mirror</text>
+<text x="61" y="676" font-size="12" fill="#9da9b6">Media and bulk data over NFS</text>
+<rect x="488" y="80" width="448" height="621" rx="10" fill="#151b23" stroke="#303a48" stroke-width="1"/>
+<text x="504" y="110" font-size="16" fill="#e6edf3" font-weight="700" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">linds-proxmox-01</text>
+<text x="920" y="108" font-size="10.5" fill="#6b7785" font-weight="700" text-anchor="end" letter-spacing="0.9">SITE LINDS</text>
+<text x="504" y="130" font-size="12" fill="#9da9b6">Dell PowerEdge T630 · 2 × Xeon E5-2640 v4 · 128 GB</text>
+<text x="504" y="147" font-size="12" fill="#9da9b6">Kernel 7.0 · PERC H730 hardware RAID under LVM-thin</text>
+<path d="M504,160 L920,160" fill="none" stroke="#303a48" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="504" y="180" font-size="10.5" fill="#6b7785" font-weight="700" letter-spacing="0.9">GUESTS</text>
+<rect x="506" y="199" width="9" height="9" rx="3" fill="#58a6ff"/>
+<text x="524" y="208" font-size="12" fill="#e6edf3" font-weight="600" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">linds-router-01</text>
+<text x="720" y="208" font-size="12" fill="#9da9b6">Debian 13 · router, firewall</text>
+<rect x="506" y="229" width="9" height="9" rx="3" fill="#3fc5b0"/>
+<text x="524" y="238" font-size="12" fill="#e6edf3" font-weight="600" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">talos-linds-worker-01, 02</text>
+<text x="720" y="238" font-size="12" fill="#9da9b6">Talos · 2 × 4 vCPU / 16 GB</text>
+<rect x="506" y="259" width="9" height="9" rx="3" fill="#b694f6"/>
+<text x="524" y="268" font-size="12" fill="#e6edf3" font-weight="600" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">linds-dc, linds-dc2</text>
+<text x="720" y="268" font-size="12" fill="#9da9b6">Server 2025 · AD, DNS, DFS-R</text>
+<rect x="506" y="289" width="9" height="9" rx="3" fill="#b694f6"/>
+<text x="524" y="298" font-size="12" fill="#e6edf3" font-weight="600" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">linds-plex-01</text>
+<text x="720" y="298" font-size="12" fill="#9da9b6">Plex</text>
+<rect x="506" y="319" width="9" height="9" rx="3" fill="#b694f6"/>
+<text x="524" y="328" font-size="12" fill="#e6edf3" font-weight="600" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">linds-torrent-02</text>
+<text x="720" y="328" font-size="12" fill="#9da9b6">qBittorrent on the VPN VLAN</text>
+<rect x="506" y="349" width="9" height="9" rx="3" fill="#e3b341"/>
+<text x="524" y="358" font-size="12" fill="#e6edf3" font-weight="600" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">linds-truenas-01</text>
+<text x="720" y="358" font-size="12" fill="#9da9b6">TrueNAS SCALE · ZFS replica</text>
+<text x="504" y="486" font-size="10.5" fill="#6b7785" font-weight="700" letter-spacing="0.9">STORAGE</text>
+<rect x="504" y="500" width="416" height="59" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="512" y="509" width="3.5" height="41" rx="1.75" fill="#e3b341"/>
+<text x="525" y="523" font-size="13.5" fill="#e6edf3" font-weight="650" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">local-lvm · 0.9 TB</text>
+<text x="906" y="523" font-size="11.5" fill="#e3b341" font-weight="600" text-anchor="end">LVM-thin</text>
+<text x="525" y="542" font-size="12" fill="#9da9b6">VM disks</text>
+<rect x="504" y="567" width="416" height="59" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="512" y="576" width="3.5" height="41" rx="1.75" fill="#e3b341"/>
+<text x="525" y="590" font-size="13.5" fill="#e6edf3" font-weight="650" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">NAS · 12 TB</text>
+<text x="906" y="590" font-size="11.5" fill="#e3b341" font-weight="600" text-anchor="end">LVM-thin</text>
+<text x="525" y="609" font-size="12" fill="#9da9b6">The replicated NAS folders (linds-dc)</text>
+<rect x="504" y="634" width="416" height="59" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="512" y="643" width="3.5" height="41" rx="1.75" fill="#e3b341"/>
+<text x="525" y="657" font-size="13.5" fill="#e6edf3" font-weight="650" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace">TrueNAS · 12 TB</text>
+<text x="906" y="657" font-size="11.5" fill="#e3b341" font-weight="600" text-anchor="end">LVM-thin</text>
+<text x="525" y="676" font-size="12" fill="#9da9b6">Disks of linds-truenas-01, the replication target</text>
+<rect x="24" y="717" width="912" height="232" rx="10" fill="#151b23" stroke="#303a48" stroke-width="1"/>
+<text x="40" y="741" font-size="10.5" fill="#6b7785" font-weight="700" letter-spacing="0.9">DATA PROTECTION</text>
+<rect x="40" y="753" width="290" height="36" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="48" y="762" width="3.5" height="18" rx="1.75" fill="#e3b341"/>
+<text x="61" y="776" font-size="13.5" fill="#e6edf3" font-weight="650">Daily ZFS snapshots at JD</text>
+<rect x="630" y="753" width="290" height="36" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="638" y="762" width="3.5" height="18" rx="1.75" fill="#e3b341"/>
+<text x="651" y="776" font-size="13.5" fill="#e6edf3" font-weight="650">linds-truenas-01 at LINDS</text>
+<path d="M338,771 L622,771" fill="none" stroke="#e3b341" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="623.5,771.0 615.7,774.0 615.7,768.0" fill="#e3b341"/>
+<rect x="404.655" y="763.5" width="150.69" height="17.5" rx="4" fill="#151b23"/>
+<text x="480" y="775" font-size="11.5" fill="#9da9b6" font-weight="500" text-anchor="middle">nightly ZFS replication</text>
+<rect x="40" y="799" width="290" height="36" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="48" y="808" width="3.5" height="18" rx="1.75" fill="#e3b341"/>
+<text x="61" y="822" font-size="13.5" fill="#e6edf3" font-weight="650">jd-fs-01, the NAS folders</text>
+<rect x="630" y="799" width="290" height="36" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="638" y="808" width="3.5" height="18" rx="1.75" fill="#e3b341"/>
+<text x="651" y="822" font-size="13.5" fill="#e6edf3" font-weight="650">linds-dc at LINDS</text>
+<path d="M338,817 L622,817" fill="none" stroke="#e3b341" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="623.5,817.0 615.7,820.0 615.7,814.0" fill="#e3b341"/>
+<polygon points="336.5,817.0 344.3,814.0 344.3,820.0" fill="#e3b341"/>
+<rect x="418.512" y="809.5" width="122.975" height="17.5" rx="4" fill="#151b23"/>
+<text x="480" y="821" font-size="11.5" fill="#9da9b6" font-weight="500" text-anchor="middle">DFS-R, both ways</text>
+<rect x="40" y="845" width="290" height="36" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="48" y="854" width="3.5" height="18" rx="1.75" fill="#e3b341"/>
+<text x="61" y="868" font-size="13.5" fill="#e6edf3" font-weight="650">ZFS clone of the NAS disk</text>
+<rect x="630" y="845" width="290" height="36" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="638" y="854" width="3.5" height="18" rx="1.75" fill="#e3b341"/>
+<text x="651" y="868" font-size="13.5" fill="#e6edf3" font-weight="650">Backblaze, off site</text>
+<path d="M338,863 L622,863" fill="none" stroke="#e3b341" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="623.5,863.0 615.7,866.0 615.7,860.0" fill="#e3b341"/>
+<rect x="398.618" y="855.5" width="162.765" height="17.5" rx="4" fill="#151b23"/>
+<text x="480" y="867" font-size="11.5" fill="#9da9b6" font-weight="500" text-anchor="middle">weekly, by jd-backup-01</text>
+<rect x="40" y="891" width="290" height="36" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="48" y="900" width="3.5" height="18" rx="1.75" fill="#e3b341"/>
+<text x="61" y="914" font-size="13.5" fill="#e6edf3" font-weight="650">CloudNativePG databases</text>
+<rect x="630" y="891" width="290" height="36" rx="9" fill="#1c2430" stroke="#303a48" stroke-width="1"/>
+<rect x="638" y="900" width="3.5" height="18" rx="1.75" fill="#e3b341"/>
+<text x="651" y="914" font-size="13.5" fill="#e6edf3" font-weight="650">jd-s3-01, S3</text>
+<path d="M338,909 L622,909" fill="none" stroke="#e3b341" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="623.5,909.0 615.7,912.0 615.7,906.0" fill="#e3b341"/>
+<rect x="390.453" y="901.5" width="179.095" height="17.5" rx="4" fill="#151b23"/>
+<text x="480" y="913" font-size="11.5" fill="#9da9b6" font-weight="500" text-anchor="middle">WAL archive, base backups</text>
+<rect x="24" y="968" width="10" height="10" rx="3" fill="#58a6ff"/>
+<text x="40" y="977" font-size="11.5" fill="#9da9b6">Router</text>
+<rect x="100.18" y="968" width="10" height="10" rx="3" fill="#3fc5b0"/>
+<text x="116.18" y="977" font-size="11.5" fill="#9da9b6">Kubernetes node</text>
+<rect x="237.655" y="968" width="10" height="10" rx="3" fill="#b694f6"/>
+<text x="253.655" y="977" font-size="11.5" fill="#9da9b6">Server</text>
+<rect x="313.835" y="968" width="10" height="10" rx="3" fill="#e3b341"/>
+<text x="329.835" y="977" font-size="11.5" fill="#9da9b6">Storage and backup</text>
+</svg>
